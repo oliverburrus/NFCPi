@@ -25,12 +25,9 @@ current_time = now.time()
 
 tsecs = round(duration.total_seconds())
 
-def record():
-  os.system('arecord --format=S16_LE --duration=' + str(tsecs) + ' --rate=16000 ' + 'sample.wav')
-
-schedule.every().day.at(today_ss.time()).do(record())
-
 while True:
-    schedule.run_pending()
-    time.sleep(60) # wait one minute
-
+    now = datetime.utcnow()
+    if now.hour==today_ss.hour and now.minute==today_ss.minute:
+        print('Starting recording...')
+        os.system('arecord --format=S16_LE --duration=' + str(tsecs) + ' --rate=16000 ' + 'sample.wav')
+    break
