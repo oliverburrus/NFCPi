@@ -23,6 +23,8 @@ current_time = now.time()
 
 tsecs = round(duration.total_seconds())
 
+print("not recording...")
+
 while True:
     now = datetime.utcnow()
     if now.hour==today_ss.hour and now.minute==today_ss.minute:
