@@ -2,8 +2,6 @@ import os
 from datetime import datetime
 from datetime import timedelta
 from suntime import Sun, SunTimeException
-import schedule
-import time
 
 latitude = 42.11
 longitude = -88.27
