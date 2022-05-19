@@ -23,11 +23,10 @@ current_time = now.time()
 
 tsecs = round(duration.total_seconds())
 
-print("not recording...")
-
-while True:
-    now = datetime.utcnow()
-    if now.hour==today_ss.hour and now.minute==today_ss.minute:
-        print('Starting recording...')
-        os.system('arecord --format=S16_LE --duration=' + str(tsecs) + ' --rate=16000 sample.wav')
-    break
+now = datetime.utcnow()
+if now.hour==today_ss.hour and now.minute==today_ss.minute:
+    print('Starting recording...')
+    os.system('arecord --format=S16_LE --duration=' + str(tsecs) + ' --rate=16000 sample.wav')
+    time.sleep(60)
+else:
+    print("not recording...")
