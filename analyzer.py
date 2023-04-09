@@ -2,7 +2,7 @@ import birdvoxdetect as bvd
 import os
 from pydub import AudioSegment
 
-df = bvd.process_file(os.getcwd() + '/sample.wav')
+df = bvd.process_file(os.getcwd() + '/mowaq941.wav')
 
 import pandas as pd
 time = pd.to_datetime(df['Time (hh:mm:ss)'], format='%H:%M:%S.%f', utc = True)
