@@ -43,7 +43,7 @@ def analyze(file, min_probability):
     image = tf.keras.preprocessing.image.img_to_array(image)
     image /= 255.0
     image = np.expand_dims(image, axis=0)
-    if !(os.path.exists('my_model.h5')):
+    if not(os.path.exists('my_model.h5')):
         model_url = 'https://drive.google.com/uc?export=download&id=1cFwNVpCaMacM9fDv_2qIEOB70XkwKfKs'
         model_path = 'my_model.h5'
         # Download model file
