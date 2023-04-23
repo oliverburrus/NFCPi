@@ -54,13 +54,13 @@ def analyze(file, min_probability):
         model_path = 'my_model.h5'
 
     # Load model from file
-    loaded_model = load_model(model_path)
+    loaded_model = tf.keras.models.load_model(model_path)
     predictions = loaded_model.predict(image)
     if np.max(predictions) > min_probability:
         predicted_class = np.argmax(predictions)
         np.set_printoptions(formatter={'float_kind': lambda x: "{:.2%}".format(x)})
         predicted_class_prob = np.max(predictions)
-        return "This audio is likely of a(n) " + predicted_class + " with a probability of " + str(predicted_class_prob)
+        return "This audio is likely of a(n) " + str(predicted_class) + " with a probability of " + str(predicted_class_prob)
     else:
         return "Not confident in my prediction"
 
