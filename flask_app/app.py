@@ -38,7 +38,7 @@ def get_wav_info(wav_file):
     return sound_info, frame_rate
 
 def record():
-    if os.exists("static/audio/sample.wav"):
+    if os.path.exists("static/audio/sample.wav"):
         os.system('rm static/audio/sample.wav')
     os.system('arecord --format=S16_LE --duration=' + str(2) + ' --rate=16000 static/audio/sample.wav')
 
