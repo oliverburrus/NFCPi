@@ -35,7 +35,7 @@ def get_wav_info(wav_file):
     return sound_info, frame_rate
 
 def analyze(file, min_probability):
-    sound_info, frame_rate = get_wav_info('sample.wav')
+    sound_info, frame_rate = get_wav_info(file)
     pylab.specgram(sound_info, Fs=frame_rate)
     pylab.savefig('sample.png')
 
