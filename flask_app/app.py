@@ -68,7 +68,7 @@ app = Flask(__name__)
 # Define the route to display the plot
 @app.route("/")
 def plot():
-    prediction = analyze(audio_file_path, 0.7)
+    prediction = analyze("static/audio/sample.wav", 0.7)
     spectrogram_path = generate_spectrogram('static/audio/sample.wav')
     return render_template('plot.html', prediction=prediction, spectrogram_path=spectrogram_path)
 
