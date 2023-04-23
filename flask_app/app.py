@@ -55,7 +55,7 @@ def analyze(file, min_probability):
 
     # Load model from file
     loaded_model = load_model(model_path)
-    predictions = model.predict(image)
+    predictions = loaded_model.predict(image)
     if np.max(predictions) > min_probability:
         predicted_class = np.argmax(predictions)
         np.set_printoptions(formatter={'float_kind': lambda x: "{:.2%}".format(x)})
