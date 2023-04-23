@@ -10,6 +10,8 @@ from tensorflow.keras.models import load_model
 import urllib.request
 import pandas as pd
 import numpy as np
+import wave
+import pylab
 
 def generate_spectrogram(filename):
     # Load audio file
