@@ -10,5 +10,8 @@
       </audio>
       <h1>Example Plot</h1>
       <img src="{{ url_for('static', filename='images/spectrogram.png') }}" alt="Spectrogram">
+      {% if prediction %}
+      <p>Prediction: {{ prediction }}</p>
+      {% endif %}
   </body>
 </html>
