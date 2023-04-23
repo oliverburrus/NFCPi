@@ -12,6 +12,7 @@ import pandas as pd
 import numpy as np
 import wave
 import pylab
+import os
 
 def generate_spectrogram(filename):
     # Load audio file
@@ -36,6 +37,11 @@ def get_wav_info(wav_file):
     wav.close()
     return sound_info, frame_rate
 
+def record():
+    if os.exists("static/audio/sample.wav"):
+        os.system('rm static/audio/sample.wav')
+    os.system('arecord --format=S16_LE --duration=' + str(2) + ' --rate=16000 static/audio/sample.wav')
+
 def analyze(file, min_probability):
     sound_info, frame_rate = get_wav_info(file)
     pylab.specgram(sound_info, Fs=frame_rate)
@@ -56,10 +62,11 @@ def analyze(file, min_probability):
     # Load model from file
     loaded_model = tf.keras.models.load_model(model_path)
     predictions = loaded_model.predict(image)
+    class_names = pd.read_csv("https://raw.githubusercontent.com/oliverburrus/NFCPi/main/models/class_names.csv")
     if np.max(predictions) > min_probability:
         predicted_class = np.argmax(predictions)
         np.set_printoptions(formatter={'float_kind': lambda x: "{:.2%}".format(x)})
-        predicted_class_prob = np.max(predictions)
+        predicted_class_prob = class_names.species[int(np.max(predictions))]
         return "This audio is likely of a(n) " + str(predicted_class) + " with a probability of " + str(predicted_class_prob)
     else:
         return "Not confident in my prediction"
@@ -70,6 +77,7 @@ app = Flask(__name__)
 # Define the route to display the plot
 @app.route("/")
 def plot():
+    record()
     prediction = analyze("static/audio/sample.wav", 0.7)
     spectrogram_path = generate_spectrogram('static/audio/sample.wav')
     return render_template('plot.html', prediction=prediction, spectrogram_path=spectrogram_path)
