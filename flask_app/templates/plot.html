@@ -4,7 +4,11 @@
     <title>Example Plot</title>
   </head>
   <body>
-    <h1>Example Plot</h1>
-    <img src="{{ url_for('static', filename='images/spectrogram.png') }}" alt="Spectrogram">
+      <audio controls>
+          <source src="{{ url_for('static', filename='audio/sample.wav') }}" type="audio/wav">
+          Your browser does not support the audio element.
+      </audio>
+      <h1>Example Plot</h1>
+      <img src="{{ url_for('static', filename='images/spectrogram.png') }}" alt="Spectrogram">
   </body>
 </html>
