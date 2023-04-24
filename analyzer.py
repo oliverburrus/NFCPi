@@ -28,11 +28,11 @@ def analyze(file):
     image = np.expand_dims(image, axis=0)
     if not(os.path.exists('my_model.h5')):
         model_url = 'https://drive.google.com/uc?export=download&id=1cFwNVpCaMacM9fDv_2qIEOB70XkwKfKs'
-        model_path = 'my_model.h5'
+        model_path = 'flask_app/my_model.h5'
         # Download model file
         urllib.request.urlretrieve(model_url, model_path)
     else:
-        model_path = 'my_model.h5'
+        model_path = 'flask_app/my_model.h5'
 
     # Load model from file
     loaded_model = tf.keras.models.load_model(model_path)
