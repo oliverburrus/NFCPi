@@ -4,3 +4,4 @@ librosa
 pydub
 tensorflow
 pandas
+suntime
