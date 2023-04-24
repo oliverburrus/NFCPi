@@ -81,7 +81,7 @@ app = Flask(__name__)
 @app.route("/")
 def plot():
     record()
-    df = analyze("static/audio/sample.wav", 0.7)
+    df = analyze("static/audio/sample.wav")
     table_html = df.to_html(index=False)
     if table_html.Prediction[0] > .7:
         prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.precentage[0])
