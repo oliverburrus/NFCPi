@@ -97,6 +97,9 @@ def plot():
         df1.to_csv("detections.csv", index=False)
     else:
         prediction = "Not confident in my prediction"
+        if not os.path.exists("detections.csv"):
+            df1 = pd.DataFrame(data = [], columns = {'Species', "Probability", "DT"})
+            df1.to_csv("detections.csv", index=False)
     spectrogram_path = generate_spectrogram('static/audio/sample.wav')
     table_html = df1.to_html(index=False)
     response = make_response(render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path))
