@@ -84,35 +84,25 @@ app = Flask(__name__)
 # Define the route to display the plot
 @app.route("/")
 def plot():
-    filename = "static/audio/sample.wav"
-    try:
-        record()
-        df = analyze(filename)
-        os.remove(filename)
-        if df.Prediction[0] > .3:
-            prediction = create_prediction_message(df)
-            new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
-            if os.path.exists("detections.csv"):
-                df1 = pd.read_csv("detections.csv")
-                df1 = pd.concat([df1, new_data], ignore_index=True)
-            else:
-                df1 = new_data
-            df1.to_csv("detections.csv", index=False)
+    df1 = pd.DataFrame()
+    record()
+    df = analyze("static/audio/sample.wav")
+    if df.Prediction[0] > .3:
+        prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
+        new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
+        if os.path.exists("detections.csv"):
+            df1 = pd.read_csv("detections.csv")
+            df1 = pd.concat([df1, new_data], ignore_index=True)
         else:
-            prediction = "Not confident in my prediction"
-            if not os.path.exists("detections.csv"):
-                new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
-                df1 = new_data
-                df1.to_csv("detections.csv", index=False)
-        spectrogram_path = generate_spectrogram(filename)
-        table_html = df1.to_html(index=False)
-        response = make_response(render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path))
-    except Exception as e:
-        prediction = "An error occurred: {}".format(str(e))
-        response = make_response(render_template('plot.html', prediction=prediction))
+            df1 = df1.append(new_data, ignore_index=True)
+        df1.to_csv("detections.csv", index=False)
+    else:
+        prediction = "Not confident in my prediction"
+    spectrogram_path = generate_spectrogram('static/audio/sample.wav')
+    table_html = df1.to_html(index=False)
+    response = make_response(render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path))
     response.headers['Refresh'] = '2'
     return response
-
 
 # Run the app
 if __name__ == "__main__":
