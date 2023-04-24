@@ -86,7 +86,6 @@ app = Flask(__name__)
 def plot():
     record()
     df = analyze("static/audio/sample.wav")
-    table_html = df.to_html(index=False)
     if df.Prediction[0] > .3:
         prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
         if os.path.exists("detections.csv"):
@@ -97,6 +96,7 @@ def plot():
     else:
         prediction = "Not confident in my prediction"
     spectrogram_path = generate_spectrogram('static/audio/sample.wav')
+    table_html = df1.to_html(index=False)
     response = make_response(render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path))
     response.headers['Refresh'] = '2'
     return response
