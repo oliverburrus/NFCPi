@@ -92,7 +92,7 @@ def plot():
             df1 = pd.read_csv("detections.csv")
             df1.append({'Species': df.Species[0], "Probability": df.percentage[0], "DT": datetime.now()})
         else:
-            df1 = pd.dataFrame({'Species': df.Species[0], "Probability": df.percentage[0], "DT": datetime.now()})
+            df1 = pd.DataFrame({'Species': df.Species[0], "Probability": df.percentage[0], "DT": datetime.now()})
     else:
         prediction = "Not confident in my prediction"
     spectrogram_path = generate_spectrogram('static/audio/sample.wav')
