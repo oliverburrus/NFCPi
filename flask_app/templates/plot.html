@@ -104,45 +104,82 @@
     </style>
   </head>
   <body>
-    <div class="container">
-      <header class="header">
-        <h1>NFCPi</h1>
-        <h2>A Warbler Nocturnal Flight Call Detector and Classifier</h2>
-      </header>
-
-      <div class="media">
-        <audio controls>
-          <source src="{{ url_for('static', filename='audio/sample.wav') }}" type="audio/wav">
-          Your browser does not support the audio element.
-        </audio>
-        <img src="{{ url_for('static', filename='images/spectrogram.png') }}" alt="Spectrogram">
+      <div class="container">
+          <h1 class="text-center">Audio Classifier</h1>
+          <div class="row justify-content-center my-4">
+              <div class="col-12 col-md-8 col-lg-6">
+                  <div class="card">
+                      <div class="card-header">
+                          Record Audio
+                      </div>
+                      <div class="card-body">
+                          <audio id="player" class="mb-3" controls style="width: 100%;"></audio>
+                          <div class="d-flex justify-content-between">
+                              <button id="record" class="btn btn-primary">Record</button>
+                              <button id="stop" class="btn btn-danger" disabled>Stop</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center my-4">
+              <div class="col-12 col-md-8 col-lg-6">
+                  <div class="card">
+                      <div class="card-header">
+                          Prediction
+                      </div>
+                      <div class="card-body">
+                          <p class="lead mb-3">{{ prediction }}</p>
+                          <table class="table table-striped">
+                              <thead>
+                                  <tr>
+                                      <th>Class</th>
+                                      <th>Prediction</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  {{ table_html | safe }}
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center my-4">
+              <div class="col-12 col-md-8 col-lg-6">
+                  <div class="card">
+                      <div class="card-header">
+                          Spectrogram
+                      </div>
+                      <div class="card-body">
+                          <img src="{{ spectrogram_path }}" alt="Spectrogram" class="img-fluid">
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
+        <script>
+        // Get the audio player element
+        const audio = document.getElementById("audio");
 
-      {% if prediction %}
-      <div class="prediction">
-        <p>Prediction: {{ prediction }}</p>
-      </div>
-      {% endif %}
+        // When the user clicks the "Play" button, play the audio and show the spectrogram
+        document.getElementById("play-button").addEventListener("click", function() {
+            audio.play();
+            document.getElementById("spectrogram").style.display = "block";
+        });
 
-      <div class="table">
-        <h3>Prediction Table</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Species</th>
-              <th>Confidence</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for row in table_data %}
-            <tr>
-              <td>{{ row[0] }}</td>
-              <td>{{ row[1] }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
+        // When the audio finishes playing, hide the spectrogram
+        audio.addEventListener("ended", function() {
+            document.getElementById("spectrogram").style.display = "none";
+        });
+
+        // When the audio player updates its current time, update the spectrogram's position
+        audio.addEventListener("timeupdate", function() {
+            const percentage = audio.currentTime / audio.duration * 100;
+            const spectrogram = document.getElementById("spectrogram");
+            const spectrogramWidth = spectrogram.offsetWidth;
+            spectrogram.style.backgroundPosition = percentage * spectrogramWidth / 100 + "px 0";
+        });
+    </script>
   </body>
 </html>
