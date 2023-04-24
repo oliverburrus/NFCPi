@@ -86,7 +86,7 @@ app = Flask(__name__)
 def plot():
     record()
     df = analyze("static/audio/sample.wav")
-    if df.Prediction[0] > .3:
+    if df.Prediction[0] > .7:
         prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
         new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
         if os.path.exists("detections.csv"):
