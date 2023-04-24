@@ -26,7 +26,7 @@ tsecs = round(duration.total_seconds())
 
 now = datetime.utcnow()
 
-if not os.Path.isdir("audio"):
+if not os.path.isdir("audio"):
  os.mkdir("audio")
 #if now.hour==today_ss.hour and now.minute==today_ss.minute:
 print('Starting recording...')
