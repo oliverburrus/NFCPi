@@ -88,11 +88,12 @@ def plot():
     df = analyze("static/audio/sample.wav")
     if df.Prediction[0] > .3:
         prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
+        new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
         if os.path.exists("detections.csv"):
             df1 = pd.read_csv("detections.csv")
-            df1.append({'Species': df.Species[0], "Probability": df.percentage[0], "DT": datetime.now()})
+            df1 = pd.concat([df1, new_data], ignore_index=True)
         else:
-            df1 = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
+            df1 = new_data
         df1.to_csv("detections.csv", index=False)
     else:
         prediction = "Not confident in my prediction"
