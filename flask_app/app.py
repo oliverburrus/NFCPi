@@ -83,7 +83,7 @@ def plot():
     record()
     df = analyze("static/audio/sample.wav")
     table_html = df.to_html(index=False)
-    if table_html.Prediction[0] > .7:
+    if df.Prediction[0] > .7:
         prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.precentage[0])
     else:
         prediction = "Not confident in my prediction"
