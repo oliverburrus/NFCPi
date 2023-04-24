@@ -1,4 +1,3 @@
-import birdvoxdetect as bvd   
 import os
 from pydub import AudioSegment
 import tensorflow as tf
