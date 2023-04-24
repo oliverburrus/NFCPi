@@ -47,6 +47,7 @@ def analyze(file):
 
     # Reset index
     df = df.reset_index(drop=True)
+    return df
 
 x = 0
 aud_dir = "audio"
