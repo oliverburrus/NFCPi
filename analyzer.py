@@ -52,7 +52,6 @@ while x == 0:
     for filename in os.scandir(aud_dir):
         if filename.is_file():
             df1 = pd.DataFrame()
-            record()
             df = analyze(filename)
             os.remove(filename)
             if df.Prediction[0] > .7:
