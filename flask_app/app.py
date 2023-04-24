@@ -90,9 +90,10 @@ def plot():
         prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
         if os.path.exists("detections.csv"):
             df1 = pd.read_csv("detections.csv")
-            df1.append({'Species': df.Species[0], "Probability": df.percentage[0], "DT": datetime.now()}, ignore_index=True)
+            df1.append({'Species': df.Species[0], "Probability": df.percentage[0], "DT": datetime.now()})
         else:
             df1 = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
+        df1.to_csv("detections.csv", index=False)
     else:
         prediction = "Not confident in my prediction"
     spectrogram_path = generate_spectrogram('static/audio/sample.wav')
