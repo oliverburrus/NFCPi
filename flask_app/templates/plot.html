@@ -1,127 +1,148 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>NFCPi - Warbler Nocturnal Flight Call Detector and Classifier</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFCPi</title>
     <style>
-   /* Global styles */
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        font-family: 'Montserrat', sans-serif;
+      /* Reset */
+      *, *::before, *::after {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Global */
+      body {
+        font-family: Arial, sans-serif;
         background-color: #f2f2f2;
-        color: #333;
       }
-      /* Header styles */
-      header {
-        background-color: #005f6b;
-        color: #fff;
-        padding: 20px;
-        text-align: center;
-      }
-      h1 {
-        font-size: 48px;
-        margin-top: 0;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-      }
-      h2 {
-        font-size: 36px;
-        margin-top: 0;
-        font-weight: normal;
-        letter-spacing: 1px;
-      }
-      /* Audio and image styles */
-      main {
+
+      .container {
         max-width: 800px;
         margin: 0 auto;
         padding: 20px;
       }
-      audio {
-        display: block;
-        margin: 20px auto;
-        width: 100%;
-        max-width: 600px;
-        border: 4px solid #005f6b;
-        border-radius: 4px;
-        background-color: #fff;
+
+      /* Header */
+      .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 40px;
       }
-      img {
-        display: block;
-        margin: 20px auto;
-        width: 100%;
-        max-width: 600px;
-        border: 4px solid #005f6b;
-        border-radius: 4px;
-        background-color: #fff;
+
+      .header h1 {
+        font-size: 3rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 0.5rem;
       }
-      /* Prediction table styles */
-      table {
-        width: 100%;
+
+      .header h2 {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+
+      /* Media */
+      .media {
+        margin-bottom: 20px;
+      }
+
+      .media img {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+      }
+
+      .media audio {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+      }
+
+      /* Prediction */
+      .prediction {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .prediction p {
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+
+      /* Table */
+      .table {
+        margin-bottom: 20px;
+      }
+
+      .table h3 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+
+      .table table {
         border-collapse: collapse;
-        margin-top: 20px;
-        border: 2px solid #005f6b;
-        border-radius: 4px;
-        overflow: hidden;
+        width: 100%;
       }
-      th, td {
-        padding: 16px;
+
+      .table th, .table td {
+        padding: 0.5rem;
         text-align: center;
         border: 1px solid #ddd;
       }
-      th {
-        background-color: #005f6b;
-        color: #fff;
+
+      .table th {
         font-weight: bold;
       }
-      td {
-        font-weight: bold;
-        font-size: 24px;
-      }
-      /* Footer styles */
-      footer {
-        background-color: #005f6b;
-        color: #fff;
-        padding: 20px;
-        text-align: center;
-        font-size: 18px;
+
+      .table td {
+        font-size: 1.25rem;
       }
     </style>
   </head>
   <body>
-    <header>
-      <h1>NFCPi</h1>
-      <h2>A Warbler Nocturnal Flight Call Detector and Classifier</h2>
-    </header>
-    <main>
-      <audio controls>
-        <source src="{{ url_for('static', filename='audio/sample.wav') }}" type="audio/wav">
-        Your browser does not support the audio element.
-      </audio>
-      <img src="{{ url_for('static', filename='images/spectrogram.png') }}" alt="Spectrogram">
+    <div class="container">
+      <header class="header">
+        <h1>NFCPi</h1>
+        <h2>A Warbler Nocturnal Flight Call Detector and Classifier</h2>
+      </header>
+
+      <div class="media">
+        <audio controls>
+          <source src="{{ url_for('static', filename='audio/sample.wav') }}" type="audio/wav">
+          Your browser does not support the audio element.
+        </audio>
+        <img src="{{ url_for('static', filename='images/spectrogram.png') }}" alt="Spectrogram">
+      </div>
+
       {% if prediction %}
-      <table>
-        <caption>Prediction Table</caption>
-        <thead>
-          <tr>
-            <th>Prediction</th>
-            <th>Confidence</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ prediction }}</td>
-            <td>{{ confidence }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="prediction">
+        <p>Prediction: {{ prediction }}</p>
+      </div>
       {% endif %}
-    </main>
-    <footer>
-      &copy; NFCPi 2023. All rights reserved.
-    </footer>
+
+      <div class="table">
+        <h3>Prediction Table</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Species</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in table_data %}
+            <tr>
+              <td>{{ row[0] }}</td>
+              <td>{{ row[1] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </body>
 </html>
