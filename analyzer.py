@@ -53,26 +53,28 @@ aud_dir = "audio"
 while x == 0:
     for filename in os.scandir(aud_dir):
         if filename.is_file():
-            df1 = pd.DataFrame()
-            df = analyze(filename)
-            os.remove(filename)
-            if df.Prediction[0] > .7:
-                prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
-                new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
-                if os.path.exists("flask_app/detections.csv"):
-                    df1 = pd.read_csv("flask_app/detections.csv")
-                    df1 = pd.concat([df1, new_data], ignore_index=True)
+            name, ext = os.path.splitext(filename)
+            if ext == ".wav":
+                df1 = pd.DataFrame()
+                df = analyze(filename.path)
+                os.remove(filename.path)
+                if df.Prediction[0] > .7:
+                    prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
+                    new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
+                    if os.path.exists("flask_app/detections.csv"):
+                        df1 = pd.read_csv("flask_app/detections.csv")
+                        df1 = pd.concat([df1, new_data], ignore_index=True)
+                    else:
+                        df1 = df1.append(new_data, ignore_index=True)
+                    df1.to_csv("flask_app/detections.csv", index=False)
                 else:
-                    df1 = df1.append(new_data, ignore_index=True)
-                df1.to_csv("flask_app/detections.csv", index=False)
-            else:
-                prediction = "Not confident in my prediction"
+                    prediction = "Not confident in my prediction"
 
-            text_file = open("flask_app/prediction.txt", "w") 
+                text_file = open("flask_app/prediction.txt", "w") 
 
-            # Writing the file 
-            text_file.write(prediction) 
-            text_file.close() 
+                # Writing the file 
+                text_file.write(prediction) 
+                text_file.close() 
 # Print dataframe
 #TODO: function to save file and remove old file
 #time = pd.to_datetime(df['Time (hh:mm:ss)'], format='%H:%M:%S.%f', utc = True)
