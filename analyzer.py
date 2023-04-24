@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import wave
 import pylab
+import time
 
 
 def get_wav_info(wav_file):
@@ -87,6 +88,8 @@ while x == 0:
             else:
                 print(f"Ignoring file {filename}, not a .wav file")
                 continue
+    time.sleep(0.5)
+            
 # Print dataframe
 #TODO: function to save file and remove old file
 #time = pd.to_datetime(df['Time (hh:mm:ss)'], format='%H:%M:%S.%f', utc = True)
