@@ -32,14 +32,17 @@
     </style>
   </head>
   <body>
+      <h1>NFCPi</h1>
+      <h2>A Warbler Nocturnal Flight Call Detector and Classifier</h2>
       <audio controls>
           <source src="{{ url_for('static', filename='audio/sample.wav') }}" type="audio/wav">
           Your browser does not support the audio element.
       </audio>
-      <h1>Example Plot</h1>
       <img src="{{ url_for('static', filename='images/spectrogram.png') }}" alt="Spectrogram">
       {% if prediction %}
       <p>Prediction: {{ prediction }}</p>
       {% endif %}
+      <h3>Prediction Table: </h3>
+      <div>{{ table_html|safe }}</div>
   </body>
 </html>
