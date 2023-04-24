@@ -5,6 +5,8 @@ from tensorflow.keras.models import load_model
 import urllib.request
 import pandas as pd
 import numpy as np
+import wave
+import pylab
 
 
 def get_wav_info(wav_file):
