@@ -58,7 +58,9 @@ while x == 0:
             if ext == ".wav":
                 df1 = pd.DataFrame()
                 df = analyze(filename.path)
+                print("1\n")
                 os.remove(filename.path)
+                print("2\n")
                 if df.Prediction[0] > .7:
                     prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
                     new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
@@ -69,13 +71,18 @@ while x == 0:
                         df1 = df1.append(new_data, ignore_index=True)
                     df1.to_csv("flask_app/detections.csv", index=False)
                 else:
+                    print("3\n")
                     prediction = "Not confident in my prediction"
 
                 text_file = open("flask_app/prediction.txt", "w") 
+                print("4\n")
 
                 # Writing the file 
                 text_file.write(prediction) 
-                text_file.close() 
+                text_file.close()
+            else:
+                print(f"Ignoring file {filename}, not a .wav file")
+                continue
 # Print dataframe
 #TODO: function to save file and remove old file
 #time = pd.to_datetime(df['Time (hh:mm:ss)'], format='%H:%M:%S.%f', utc = True)
