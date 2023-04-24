@@ -1,185 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NFCPi</title>
     <style>
-      /* Reset */
-      *, *::before, *::after {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      /* Global */
       body {
         font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
         background-color: #f2f2f2;
-      }
-
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-
-      /* Header */
-      .header {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         align-items: center;
-        margin-bottom: 40px;
+        height: 100vh;
       }
-
-      .header h1 {
-        font-size: 3rem;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 0.5rem;
-      }
-
-      .header h2 {
-        font-size: 1.5rem;
-        text-align: center;
-      }
-
-      /* Media */
-      .media {
-        margin-bottom: 20px;
-      }
-
-      .media img {
+      audio {
         display: block;
-        margin: 0 auto;
-        max-width: 100%;
+        margin: 20px auto;
+        max-width: 600px;
       }
-
-      .media audio {
+      h1 {
+        text-align: center;
+        margin: 40px 0;
+      }
+      img {
         display: block;
-        margin: 0 auto;
-        max-width: 100%;
+        margin: 20px auto;
+        max-width: 600px;
       }
-
-      /* Prediction */
-      .prediction {
+      p {
         text-align: center;
-        margin-bottom: 20px;
-      }
-
-      .prediction p {
-        font-size: 1.25rem;
+        margin: 20px 0;
+        font-size: 18px;
         font-weight: bold;
-      }
-
-      /* Table */
-      .table {
-        margin-bottom: 20px;
-      }
-
-      .table h3 {
-        font-size: 1.25rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-      }
-
-      .table table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-
-      .table th, .table td {
-        padding: 0.5rem;
-        text-align: center;
-        border: 1px solid #ddd;
-      }
-
-      .table th {
-        font-weight: bold;
-      }
-
-      .table td {
-        font-size: 1.25rem;
       }
     </style>
   </head>
   <body>
-      <div class="container">
-          <h1 class="text-center">Audio Classifier</h1>
-          <div class="row justify-content-center my-4">
-              <div class="col-12 col-md-8 col-lg-6">
-                  <div class="card">
-                      <div class="card-header">
-                          Record Audio
-                      </div>
-                      <div class="card-body">
-                          <audio id="player" class="mb-3" controls style="width: 100%;"></audio>
-                          <div class="d-flex justify-content-between">
-                              <button id="record" class="btn btn-primary">Record</button>
-                              <button id="stop" class="btn btn-danger" disabled>Stop</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="row justify-content-center my-4">
-              <div class="col-12 col-md-8 col-lg-6">
-                  <div class="card">
-                      <div class="card-header">
-                          Prediction
-                      </div>
-                      <div class="card-body">
-                          <p class="lead mb-3">{{ prediction }}</p>
-                          <table class="table table-striped">
-                              <thead>
-                                  <tr>
-                                      <th>Class</th>
-                                      <th>Prediction</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  {{ table_html | safe }}
-                              </tbody>
-                          </table>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="row justify-content-center my-4">
-              <div class="col-12 col-md-8 col-lg-6">
-                  <div class="card">
-                      <div class="card-header">
-                          Spectrogram
-                      </div>
-                      <div class="card-body">
-                          <img src="{{ spectrogram_path }}" alt="Spectrogram" class="img-fluid">
-                      </div>
-                  </div>
-              </div>
-          </div>
+      <div>
+        <h1>NFCPi</h1>
+        <h2>A Warbler Nocturnal Flight Call Detector and Classifier</h2>
+        <audio controls>
+            <source src="{{ url_for('static', filename='audio/sample.wav') }}" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
+        <img src="{{ url_for('static', filename='images/spectrogram.png') }}" alt="Spectrogram">
+        {% if prediction %}
+        <p>Prediction: {{ prediction }}</p>
+        {% endif %}
+        <h3>Prediction Table: </h3>
+        <div>{{ table_html|safe }}</div>
       </div>
-        <script>
-        // Get the audio player element
-        const audio = document.getElementById("audio");
-
-        // When the user clicks the "Play" button, play the audio and show the spectrogram
-        document.getElementById("play-button").addEventListener("click", function() {
-            audio.play();
-            document.getElementById("spectrogram").style.display = "block";
-        });
-
-        // When the audio finishes playing, hide the spectrogram
-        audio.addEventListener("ended", function() {
-            document.getElementById("spectrogram").style.display = "none";
-        });
-
-        // When the audio player updates its current time, update the spectrogram's position
-        audio.addEventListener("timeupdate", function() {
-            const percentage = audio.currentTime / audio.duration * 100;
-            const spectrogram = document.getElementById("spectrogram");
-            const spectrogramWidth = spectrogram.offsetWidth;
-            spectrogram.style.backgroundPosition = percentage * spectrogramWidth / 100 + "px 0";
-        });
-    </script>
   </body>
 </html>
