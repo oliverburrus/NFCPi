@@ -15,6 +15,8 @@ import pylab
 import os
 from flask import Flask, render_template, make_response
 import time
+from datetime import datetime
+
 
 def generate_spectrogram(filename):
     # Load audio file
@@ -85,8 +87,13 @@ def plot():
     record()
     df = analyze("static/audio/sample.wav")
     table_html = df.to_html(index=False)
-    if df.Prediction[0] > .7:
+    if df.Prediction[0] > .3:
         prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
+        if os.path.exists("detections.csv"):
+            df1 = pd.read_csv("detections.csv")
+            df1.append({'Species': df.Species[0], "Probability": df.percentage[0], "DT": datetime.now()})
+        else:
+            df1 = pd.dataFrame({'Species': df.Species[0], "Probability": df.percentage[0], "DT": datetime.now()})
     else:
         prediction = "Not confident in my prediction"
     spectrogram_path = generate_spectrogram('static/audio/sample.wav')
