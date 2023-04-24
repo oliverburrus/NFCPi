@@ -51,10 +51,14 @@ def analyze(file):
 
 x = 0
 aud_dir = "audio"
+print("before loop")
 while x == 0:
+    print("before for loop")
     for filename in os.scandir(aud_dir):
+        print("before if 1")
         if filename.is_file():
             name, ext = os.path.splitext(filename)
+            print("before if 2")
             if ext == ".wav":
                 df1 = pd.DataFrame()
                 df = analyze(filename.path)
