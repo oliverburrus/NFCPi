@@ -53,7 +53,8 @@ while x == 0:
         if filename.is_file():
             df1 = pd.DataFrame()
             record()
-            df = analyze("static/audio/sample.wav")
+            df = analyze(filename)
+            os.remove(filename)
             if df.Prediction[0] > .7:
                 prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
                 new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
