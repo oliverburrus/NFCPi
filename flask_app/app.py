@@ -42,7 +42,7 @@ def record():
         os.system('rm static/audio/sample.wav')
     os.system('arecord --format=S16_LE --duration=' + str(2) + ' --rate=16000 static/audio/sample.wav')
 
-def analyze(file, min_probability):
+def analyze(file):
     sound_info, frame_rate = get_wav_info(file)
     pylab.specgram(sound_info, Fs=frame_rate)
     pylab.savefig('sample.png')
@@ -62,14 +62,17 @@ def analyze(file, min_probability):
     # Load model from file
     loaded_model = tf.keras.models.load_model(model_path)
     predictions = loaded_model.predict(image)
-    class_names = pd.read_csv("https://raw.githubusercontent.com/oliverburrus/NFCPi/main/models/class_names.csv")
-    if np.max(predictions) > min_probability:
-        predicted_class = np.argmax(predictions)
-        np.set_printoptions(formatter={'float_kind': lambda x: "{:.2%}".format(x)})
-        predicted_class_prob = class_names.species[int(np.max(predictions))]
-        return "This audio is likely of a(n) " + str(predicted_class) + " with a probability of " + str(predicted_class_prob)
-    else:
-        return "Not confident in my prediction"
+    df = pd.read_csv("https://raw.githubusercontent.com/oliverburrus/NFCPi/main/models/class_names.csv")
+    # Create dataframe with class names and predictions
+    df['Prediction'] = predictions[0]
+    df['percentage'] = df['Prediction'].apply(lambda x: f"{x:.2%}")
+
+    # Sort dataframe by prediction in descending order
+    df = df.sort_values(by='Prediction', ascending=False)
+
+    # Reset index
+    df = df.reset_index(drop=True)
+    return df
 
 # Create the Flask app
 app = Flask(__name__)
@@ -78,9 +81,14 @@ app = Flask(__name__)
 @app.route("/")
 def plot():
     record()
-    prediction = analyze("static/audio/sample.wav", 0.7)
+    df = analyze("static/audio/sample.wav", 0.7)
+    table_html = df.to_html(index=False)
+    if table_html.Prediction[0] > .7:
+        prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.precentage[0])
+    else:
+        prediction = "Not confident in my prediction"
     spectrogram_path = generate_spectrogram('static/audio/sample.wav')
-    return render_template('plot.html', prediction=prediction, spectrogram_path=spectrogram_path)
+    return render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path)
 
 # Run the app
 if __name__ == "__main__":
