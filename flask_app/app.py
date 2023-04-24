@@ -98,7 +98,8 @@ def plot():
     else:
         prediction = "Not confident in my prediction"
         if not os.path.exists("detections.csv"):
-            df1 = pd.DataFrame(data = [], columns = {'Species', "Probability", "DT"})
+            new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
+            df1 = new_data
             df1.to_csv("detections.csv", index=False)
     spectrogram_path = generate_spectrogram('static/audio/sample.wav')
     table_html = df1.to_html(index=False)
