@@ -30,7 +30,7 @@ if not os.path.isdir("audio"):
  os.mkdir("audio")
 #if now.hour==today_ss.hour and now.minute==today_ss.minute:
 print('Starting recording...')
-os.system('arecord --format=S16_LE --duration=' + str(2) + ' --rate=16000 audio/'+ str(datetime.datetime.now().timestamp())+'.wav')
+os.system('arecord --format=S16_LE --duration=' + str(2) + ' --rate=16000 audio/'+ str(datetime.now().timestamp())+'.wav')
 #time.sleep(60)
 #else:
  #   print("not recording...")
