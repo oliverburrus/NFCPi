@@ -63,7 +63,7 @@ def generate_spectrogram(filename):
     img = librosa.display.specshow(librosa.power_to_db(S, ref=np.max), ax=ax)
 
     # Save the spectrogram as an image
-    fig.savefig('static/images/spectrogram.png')
+    fig.savefig('flask_app/static/images/spectrogram.png')
 
     # Return the path to the spectrogram image
     #return 'static/images/spectrogram.png'
