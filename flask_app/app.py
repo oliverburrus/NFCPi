@@ -42,7 +42,10 @@ app = Flask(__name__)
 # Define the route to display the plot
 @app.route("/")
 def plot():
-    df1 = pd.read_csv("detections.csv")
+    if os.path.exists("detections.csv"):
+        df1 = pd.read_csv("detections.csv")
+    else:
+        df1 = pd.DataFrame({"Species": "No Detections"})
     prediction = Path('prediction.txt').read_text()
     spectrogram_path = generate_spectrogram('static/audio/sample.wav')
     table_html = df1[0:9].to_html(index=False)
