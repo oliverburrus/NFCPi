@@ -9,6 +9,8 @@ import wave
 import pylab
 import time
 from datetime import datetime
+import librosa
+import matplotlib.pyplot as plt
 
 
 def get_wav_info(wav_file):
@@ -51,6 +53,21 @@ def analyze(file):
     df = df.reset_index(drop=True)
     return df
 
+def generate_spectrogram(filename):
+    # Load audio file
+    y, sr = librosa.load(filename)
+
+    # Generate spectrogram
+    S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
+    fig, ax = plt.subplots()
+    img = librosa.display.specshow(librosa.power_to_db(S, ref=np.max), ax=ax)
+
+    # Save the spectrogram as an image
+    fig.savefig('static/images/spectrogram.png')
+
+    # Return the path to the spectrogram image
+    #return 'static/images/spectrogram.png'
+
 x = 0
 aud_dir = "audio"
 print("before loop")
@@ -64,6 +81,7 @@ while x == 0:
             if ext == ".wav":
                 df1 = pd.DataFrame()
                 df = analyze(filename.path)
+                generate_spectrogram(filename)
                 print("1\n")
                 os.remove(filename.path)
                 print("2\n")
@@ -90,7 +108,7 @@ while x == 0:
             else:
                 print(f"Ignoring file {filename}, not a .wav file")
                 continue
-    time.sleep(0.5)
+    time.sleep(1)
             
 # Print dataframe
 #TODO: function to save file and remove old file
