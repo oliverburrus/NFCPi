@@ -43,7 +43,7 @@ app = Flask(__name__)
 @app.route("/")
 def plot():
     df1 = pd.read_csv("detections.csv")
-    txt = Path('prediction.txt').read_text()
+    prediction = Path('prediction.txt').read_text()
     spectrogram_path = generate_spectrogram('static/audio/sample.wav')
     table_html = df1[0:9].to_html(index=False)
     response = make_response(render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path))
