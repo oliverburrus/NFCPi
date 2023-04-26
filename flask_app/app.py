@@ -18,24 +18,6 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-
-def generate_spectrogram(filename):
-    # Load audio file
-    y, sr = librosa.load(filename)
-
-    # Generate spectrogram
-    S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
-    fig, ax = plt.subplots()
-    img = librosa.display.specshow(librosa.power_to_db(S, ref=np.max), ax=ax)
-
-    # Save the spectrogram as an image
-    fig.savefig('static/images/spectrogram.png')
-
-    # Return the path to the spectrogram image
-    return 'static/images/spectrogram.png'
-
-
-
 # Create the Flask app
 app = Flask(__name__)
 
@@ -47,7 +29,7 @@ def plot():
     else:
         df1 = pd.DataFrame({"Species": "No Detections"})
     prediction = Path('prediction.txt').read_text()
-    spectrogram_path = generate_spectrogram('static/audio/sample.wav')
+    spectrogram_path = "static/images/spectrogram.png"
     table_html = df1[0:9].to_html(index=False)
     response = make_response(render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path))
     response.headers['Refresh'] = '2'
