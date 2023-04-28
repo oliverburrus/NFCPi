@@ -11,7 +11,9 @@ import time
 from datetime import datetime
 import librosa
 import matplotlib.pyplot as plt
-
+from birdnetlib import Recording
+from birdnetlib.analyzer import Analyzer
+from datetime import date
 
 def get_wav_info(wav_file):
     wav = wave.open(wav_file, 'r')
@@ -53,6 +55,21 @@ def analyze(file):
     df = df.reset_index(drop=True)
     return df
 
+def analyze_birdnet(file, lat, lon):
+    # Load and initialize the BirdNET-Analyzer models.
+    analyzer = Analyzer()
+
+    recording = Recording(
+        analyzer,
+        file,
+        lat=lat,
+        lon=-lon,
+        date=date.today(), # use date or week_48
+        min_conf=0.6,
+    )
+    recording.analyze()
+    return pd.DataFrame(recording.detections)
+
 def generate_spectrogram(filename):
     # Load audio file
     y, sr = librosa.load(filename)
@@ -69,6 +86,7 @@ def generate_spectrogram(filename):
     #return 'static/images/spectrogram.png'
 
 x = 0
+net = "day"
 aud_dir = "audio"
 print("before loop")
 while x == 0:
@@ -79,32 +97,57 @@ while x == 0:
             name, ext = os.path.splitext(filename)
             print("before if 2")
             if ext == ".wav":
-                df1 = pd.DataFrame()
-                df = analyze(filename.path)
-                generate_spectrogram(filename)
-                print("1\n")
-                os.remove(filename.path)
-                print("2\n")
-                if df.Prediction[0] > .7:
-                    prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
-                    new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
-                    if os.path.exists("flask_app/detections.csv"):
-                        df1 = pd.read_csv("flask_app/detections.csv")
-                        df1 = pd.concat([df1, new_data], ignore_index=True)
+                if net == "NFC":
+                    df1 = pd.DataFrame()
+                    df = analyze(filename.path)
+                    generate_spectrogram(filename)
+                    print("1\n")
+                    os.remove(filename.path)
+                    print("2\n")
+                    if df.Prediction[0] > .7:
+                        prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
+                        new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
+                        if os.path.exists("flask_app/detections.csv"):
+                            df1 = pd.read_csv("flask_app/detections.csv")
+                            df1 = pd.concat([df1, new_data], ignore_index=True)
+                        else:
+                            df2 = pd.DataFrame(columns=['Species', 'Probability', 'DT'])
+                            df1 = pd.concat([df2, new_data], ignore_index=True)
+                        df1.to_csv("flask_app/detections.csv", index=False)
                     else:
-                        df2 = pd.DataFrame(columns=['Species', 'Probability', 'DT'])
-                        df1 = pd.concat([df2, new_data], ignore_index=True)
-                    df1.to_csv("flask_app/detections.csv", index=False)
-                else:
-                    print("3\n")
-                    prediction = "Not confident in my prediction"
+                        print("3\n")
+                        prediction = "Not confident in my prediction"
 
-                text_file = open("flask_app/prediction.txt", "w") 
-                print("4\n")
+                    text_file = open("flask_app/prediction.txt", "w") 
+                    print("4\n")
 
-                # Writing the file 
-                text_file.write(prediction) 
-                text_file.close()
+                    # Writing the file 
+                    text_file.write(prediction) 
+                    text_file.close()
+                else if net == "day":
+                    df1 = pd.DataFrame()
+                    df = analyze_birdnet(filename.path, 43.9, -90.0)
+                    generate_spectrogram(filename)
+                    print("1\n")
+                    os.remove(filename.path)
+                    if my_list:
+                        prediction = "Found a match!"
+                        if os.path.exists("flask_app/bn_detections.csv"):
+                            df1 = pd.read_csv("flask_app/bn_detections.csv")
+                            df1 = pd.concat([df1, df], ignore_index=True)
+                        else:
+                            df1 = pd.DataFrame(columns=['common_name', 'confidence', 'end_time', 'scientific_name', 'start_time'])
+                            df1 = pd.concat([df1, df], ignore_index=True)
+                        df1.to_csv("flask_app/bn_detections.csv", index=False)
+                    else:
+                        print("3\n")
+                        prediction = "Not confident in my prediction"
+                    text_file = open("flask_app/prediction.txt", "w") 
+                    print("4\n")
+
+                    # Writing the file 
+                    text_file.write(prediction) 
+                    text_file.close()
             else:
                 print(f"Ignoring file {filename}, not a .wav file")
                 continue
