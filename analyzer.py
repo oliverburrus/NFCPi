@@ -124,7 +124,7 @@ while x == 0:
                     # Writing the file 
                     text_file.write(prediction) 
                     text_file.close()
-                else if net == "day":
+                elif net == "day":
                     df1 = pd.DataFrame()
                     df = analyze_birdnet(filename.path, 43.9, -90.0)
                     generate_spectrogram(filename)
