@@ -27,7 +27,8 @@ def plot():
     if os.path.exists("bn_detections.csv"):
         df1 = pd.read_csv("bn_detections.csv")
     else:
-        df1 = pd.DataFrame({"Species": "No Detections"})
+        new_data = ["No detections"]
+        df1 = pd.DataFrame({"Species": new_data})
     prediction = Path('prediction.txt').read_text()
     spectrogram_path = "static/images/spectrogram.png"
     table_html = df1[0:9].to_html(index=False)
