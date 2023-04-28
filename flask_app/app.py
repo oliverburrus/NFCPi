@@ -33,7 +33,7 @@ def plot():
     spectrogram_path = "static/images/spectrogram.png"
     table_html = df1[0:9].to_html(index=False)
     response = make_response(render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path))
-    response.headers['Refresh'] = '2'
+    response.headers['Refresh'] = '10'
     return response
 
 # Run the app
