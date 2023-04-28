@@ -24,8 +24,8 @@ app = Flask(__name__)
 # Define the route to display the plot
 @app.route("/")
 def plot():
-    if os.path.exists("detections.csv"):
-        df1 = pd.read_csv("detections.csv")
+    if os.path.exists("bn_detections.csv"):
+        df1 = pd.read_csv("bn_detections.csv")
     else:
         df1 = pd.DataFrame({"Species": "No Detections"})
     prediction = Path('prediction.txt').read_text()
