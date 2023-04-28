@@ -68,7 +68,7 @@ def analyze_birdnet(file, lat, lon):
         min_conf=0.6,
     )
     recording.analyze()
-    return pd.DataFrame(recording.detections)
+    return recording.detections
 
 def generate_spectrogram(filename):
     # Load audio file
@@ -126,11 +126,12 @@ while x == 0:
                     text_file.close()
                 elif net == "day":
                     df1 = pd.DataFrame()
-                    df = analyze_birdnet(filename.path, 43.9, -90.0)
+                    bn_list = analyze_birdnet(filename.path, 43.9, -90.0)
+                    df = pd.DataFrame(bn_list)
                     generate_spectrogram(filename)
                     print("1\n")
                     os.remove(filename.path)
-                    if my_list:
+                    if bn_list:
                         prediction = "Found a match!"
                         if os.path.exists("flask_app/bn_detections.csv"):
                             df1 = pd.read_csv("flask_app/bn_detections.csv")
