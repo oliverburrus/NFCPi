@@ -24,12 +24,12 @@ app = Flask(__name__)
 # Define the route to display the plot
 @app.route("/")
 def plot():
-    if os.path.exists("bn_detections.csv"):
-        df1 = pd.read_csv("bn_detections.csv")
+    if os.path.exists("flask_app/bn_detections.csv"):
+        df1 = pd.read_csv("flask_app/bn_detections.csv")
     else:
         new_data = ["No detections"]
         df1 = pd.DataFrame({"Species": new_data})
-    prediction = Path('prediction.txt').read_text()
+    prediction = Path('flask_app/prediction.txt').read_text()
     spectrogram_path = "static/images/spectrogram.png"
     table_html = df1[0:9].to_html(index=False)
     response = make_response(render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path))
