@@ -28,9 +28,9 @@ now = datetime.utcnow()
 
 if not os.path.isdir("audio"):
  os.mkdir("audio")
-#if now.hour==today_ss.hour and now.minute==today_ss.minute:
 x = 0
 while x == 0:
+ #While between sunset ans sunrise:
  print('Starting recording...')
  os.system('arecord --format=S16_LE --duration=' + str(10) + ' --rate=16000 audio/'+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+'.wav')
 #time.sleep(60)
