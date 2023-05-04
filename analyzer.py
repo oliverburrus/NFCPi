@@ -89,6 +89,8 @@ x = 0
 net = "day"
 aud_dir = "audio"
 print("before loop")
+if not os.path.exists("audio"):
+    os.mkdir("audio")
 while x == 0:
     print("before for loop")
     for filename in os.scandir(aud_dir):
