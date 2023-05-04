@@ -6,3 +6,4 @@ tensorflow
 pandas
 suntime
 birdnetlib
+resampy
