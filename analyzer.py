@@ -26,9 +26,10 @@ def get_wav_info(wav_file):
 def analyze(file):
     sound_info, frame_rate = get_wav_info(file)
     pylab.specgram(sound_info, Fs=frame_rate)
+    pylab.savefig('sample.png')
     pylab.savefig('flask_app/static/images/spectrogram.png')
 
-    image = tf.keras.preprocessing.image.load_img('flask_app/static/images/spectrogram.png', target_size=(256, 256))
+    image = tf.keras.preprocessing.image.load_img('sample.png', target_size=(256, 256))
     image = tf.keras.preprocessing.image.img_to_array(image)
     image /= 255.0
     image = np.expand_dims(image, axis=0)
