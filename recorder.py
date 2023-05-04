@@ -25,9 +25,9 @@ current_time = now.time()
 tsecs = round(duration.total_seconds())
 
 now = datetime.utcnow()
+if not os.path.exists("audio"):
+    os.mkdir("audio")
 
-if not os.path.isdir("audio"):
- os.mkdir("audio")
 x = 0
 while x == 0:
  #While between sunset ans sunrise:
