@@ -117,7 +117,6 @@ while x == 0:
                         df1 = pd.DataFrame()
                         bn_list = analyze_birdnet(filename.path, 43.9, -90.0)
                         df = pd.DataFrame(bn_list)
-                        generate_spectrogram(filename)
                         print("1\n")
                         os.remove(filename.path)
                         if bn_list:
