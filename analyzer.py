@@ -75,7 +75,7 @@ def generate_spectrogram(filename):
     y, sr = librosa.load(filename)
 
     # Generate spectrogram
-    S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
+    S = librosa.feature.melspectrogram(y=y, sr=sr)
     fig, ax = plt.subplots()
     img = librosa.display.specshow(librosa.power_to_db(S, ref=np.max), ax=ax)
 
