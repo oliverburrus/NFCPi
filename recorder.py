@@ -32,7 +32,7 @@ x = 0
 while x == 0:
  #While between sunset ans sunrise:
  print('Starting recording...')
- os.system('arecord -D plug:default -f S16_LE -c 1 -r 41000 -d 10 audio/'+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+'.wav')
+ os.system('arecord --format=S16_LE --duration=2 --rate=24000 audio/'+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+'.wav')
 #time.sleep(60)
 #else:
  #   print("not recording...")
