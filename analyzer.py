@@ -27,7 +27,6 @@ def analyze(file):
     sound_info, frame_rate = get_wav_info(file)
     pylab.specgram(sound_info, Fs=frame_rate)
     pylab.savefig('sample.png')
-    pylab.savefig('flask_app/static/images/spectrogram.png')
 
     image = tf.keras.preprocessing.image.load_img('sample.png', target_size=(256, 256))
     image = tf.keras.preprocessing.image.img_to_array(image)
@@ -55,6 +54,11 @@ def analyze(file):
     # Reset index
     df = df.reset_index(drop=True)
     return df
+
+def generate_spectrogram(filename):
+    sound_info, frame_rate = get_wav_info(filename)
+    pylab.specgram(sound_info, Fs=frame_rate)
+    pylab.savefig('flask_app/static/images/spectrogram.png')
 
 def analyze_birdnet(file, lat, lon):
     # Load and initialize the BirdNET-Analyzer models.
@@ -117,6 +121,7 @@ while x == 0:
                         df1 = pd.DataFrame()
                         bn_list = analyze_birdnet(filename.path, 43.9, -90.0)
                         df = pd.DataFrame(bn_list)
+                        generate_spectrogram(filename)
                         print("1\n")
                         os.remove(filename.path)
                         if bn_list:
