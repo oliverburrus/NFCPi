@@ -26,9 +26,9 @@ def get_wav_info(wav_file):
 def analyze(file):
     sound_info, frame_rate = get_wav_info(file)
     pylab.specgram(sound_info, Fs=frame_rate)
-    pylab.savefig('sample.png')
+    pylab.savefig('flask_app/static/images/spectrogram.png')
 
-    image = tf.keras.preprocessing.image.load_img('sample.png', target_size=(256, 256))
+    image = tf.keras.preprocessing.image.load_img('flask_app/static/images/spectrogram.png', target_size=(256, 256))
     image = tf.keras.preprocessing.image.img_to_array(image)
     image /= 255.0
     image = np.expand_dims(image, axis=0)
@@ -69,21 +69,6 @@ def analyze_birdnet(file, lat, lon):
     )
     recording.analyze()
     return recording.detections
-
-def generate_spectrogram(filename):
-    # Load audio file
-    y, sr = librosa.load(filename)
-
-    # Generate spectrogram
-    S = librosa.feature.melspectrogram(y=y, sr=sr)
-    fig, ax = plt.subplots()
-    img = librosa.display.specshow(librosa.power_to_db(S, ref=np.max), ax=ax)
-
-    # Save the spectrogram as an image
-    fig.savefig('flask_app/static/images/spectrogram.png')
-
-    # Return the path to the spectrogram image
-    #return 'static/images/spectrogram.png'
 
 x = 0
 net = "day"
