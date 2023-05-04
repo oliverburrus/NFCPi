@@ -5,3 +5,4 @@ pydub
 tensorflow
 pandas
 suntime
+birdnetlib
