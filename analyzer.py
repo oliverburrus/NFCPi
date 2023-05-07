@@ -59,8 +59,8 @@ def analyze(file):
 def generate_spectrogram(filename):
     # Load audio file
     y, sr = librosa.load(filename)
-    print("Sample rate - Spec:" + sr)
-    print("Audio length - Spec:" + len(y))
+    print("Sample rate - Spec:" + str(sr))
+    print("Audio length - Spec:" + str(len(y)))
     
     # Generate spectrogram
     S = librosa.feature.melspectrogram(y=y, sr=sr)
