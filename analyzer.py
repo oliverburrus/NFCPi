@@ -25,6 +25,7 @@ def get_wav_info(wav_file):
 
 def analyze(file):
     sound_info, frame_rate = get_wav_info(file)
+    print(frame_rate)
     pylab.specgram(sound_info, Fs=frame_rate)
     pylab.savefig('sample.png')
 
@@ -58,7 +59,9 @@ def analyze(file):
 def generate_spectrogram(filename):
     # Load audio file
     y, sr = librosa.load(filename)
-
+    print("Sample rate - Spec:" + sr)
+    print("Audio length - Spec:" + len(y))
+    
     # Generate spectrogram
     S = librosa.feature.melspectrogram(y=y, sr=sr)
     fig, ax = plt.subplots()
