@@ -83,7 +83,7 @@ def analyze_birdnet(file, lat, lon):
         analyzer,
         file,
         lat=lat,
-        lon=-lon,
+        lon=lon,
         date=date.today(), # use date or week_48
         min_conf=0.2,
     )
