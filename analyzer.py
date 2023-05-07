@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from birdnetlib import Recording
 from birdnetlib.analyzer import Analyzer
 from datetime import date
+import shutil
 
 def get_wav_info(wav_file):
     wav = wave.open(wav_file, 'r')
@@ -105,6 +106,12 @@ while x == 0:
             name, ext = os.path.splitext(filename)
             print("before if 2")
             if ext == ".wav":
+                # specify the source and destination file paths
+                src_file = filename.path
+                dst_file = "/home/pi/NFCPi/flask_app/static/audio/sample.wav"
+
+                # copy the file from source to destination
+                shutil.copy(src_file, dst_file)
                 if net == "NFC":
                     df1 = pd.DataFrame()
                     df = analyze(filename.path)
