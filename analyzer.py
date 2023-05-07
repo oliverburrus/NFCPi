@@ -144,6 +144,7 @@ while x == 0:
                         df1 = pd.DataFrame()
                         bn_list = analyze_birdnet(filename.path, 43.9, -90.0)
                         df = pd.DataFrame(bn_list)
+                        df['timestamp'] = datetime.now()
                         generate_spectrogram(filename)
                         print("1\n")
                         os.remove(filename.path)
@@ -153,7 +154,7 @@ while x == 0:
                                 df1 = pd.read_csv("flask_app/bn_detections.csv")
                                 df1 = pd.concat([df1, df], ignore_index=True)
                             else:
-                                df1 = pd.DataFrame(columns=['common_name', 'confidence', 'end_time', 'scientific_name', 'start_time'])
+                                df1 = pd.DataFrame(columns=['common_name', 'confidence', 'end_time', 'scientific_name', 'start_time', 'timestamp'])
                                 df1 = pd.concat([df1, df], ignore_index=True)
                             df1.to_csv("flask_app/bn_detections.csv", index=False)
                         else:
