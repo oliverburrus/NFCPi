@@ -45,6 +45,8 @@
             Your browser does not support the audio element.
         </audio>
         <img src="{{ url_for('static', filename='images/spectrogram.png') }}" alt="Spectrogram">
+        <h3>Most Recent Detection</h3>
+        <img src="{{ url_for('static', filename='images/last_detect.png') }}" alt="Spectrogram">
         {% if prediction %}
         <p>Prediction: {{ prediction }}</p>
         {% endif %}
