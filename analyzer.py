@@ -106,12 +106,6 @@ while x == 0:
             name, ext = os.path.splitext(filename)
             print("before if 2")
             if ext == ".wav":
-                # specify the source and destination file paths
-                src_file = filename.path
-                dst_file = "/home/pi/NFCPi/flask_app/static/audio/sample.wav"
-
-                # copy the file from source to destination
-                shutil.copy(src_file, dst_file)
                 if net == "NFC":
                     df1 = pd.DataFrame()
                     df = analyze(filename.path)
@@ -154,7 +148,7 @@ while x == 0:
                             shutil.copy(src_file, dst_file)
                             # specify the source and destination file paths
                             src_file = filename.path
-                            dst_file = "/home/pi/NFCPi/flask_app/static/audio/"+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+".png"
+                            dst_file = "/home/pi/NFCPi/flask_app/static/audio/"+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+".wav"
 
                             # copy the file from source to destination
                             shutil.copy(src_file, dst_file)
