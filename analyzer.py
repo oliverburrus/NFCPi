@@ -56,9 +56,19 @@ def analyze(file):
     return df
 
 def generate_spectrogram(filename):
-    sound_info, frame_rate = get_wav_info(filename)
-    pylab.specgram(sound_info, Fs=frame_rate)
-    pylab.savefig('flask_app/static/images/spectrogram.png')
+    # Load audio file
+    y, sr = librosa.load(filename)
+
+    # Generate spectrogram
+    S = librosa.feature.melspectrogram(y=y, sr=sr)
+    fig, ax = plt.subplots()
+    img = librosa.display.specshow(librosa.power_to_db(S, ref=np.max), ax=ax)
+
+    # Save the spectrogram as an image
+    fig.savefig('flask_app/static/images/spectrogram.png')
+
+    # Return the path to the spectrogram image
+    #return 'static/images/spectrogram.png'
 
 def analyze_birdnet(file, lat, lon):
     # Load and initialize the BirdNET-Analyzer models.
