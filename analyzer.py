@@ -160,8 +160,8 @@ while x == 0:
                                 df1 = pd.read_csv("flask_app/bn_detections.csv")
                                 df1 = pd.concat([df1, df], ignore_index=True)
                             else:
-                                df1 = pd.DataFrame(columns=['common_name', 'confidence', 'end_time', 'scientific_name', 'start_time', 'timestamp'])
-                                df1 = pd.concat([df1, df], ignore_index=True)
+                                df2 = pd.DataFrame(columns=['common_name', 'confidence', 'end_time', 'scientific_name', 'start_time', 'timestamp'])
+                                df1 = pd.concat([df2, df], ignore_index=True)
                             df1.to_csv("flask_app/bn_detections.csv", index=False)
                         else:
                             print("3\n")
