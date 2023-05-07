@@ -1,22 +1,5 @@
 from flask import Flask, render_template
-import matplotlib.pyplot as plt
-import numpy as np
-import librosa
-import librosa.display
 import os
-from pydub import AudioSegment
-import tensorflow as tf
-from tensorflow.keras.models import load_model
-import urllib.request
-import pandas as pd
-import numpy as np
-import wave
-import pylab
-import os
-from flask import Flask, render_template, make_response
-import time
-from datetime import datetime
-from pathlib import Path
 
 # Create the Flask app
 app = Flask(__name__)
@@ -33,9 +16,22 @@ def plot():
     spectrogram_path = "static/images/spectrogram.png"
     last_detect_path = "static/images/last_detect.png"
     table_html = df1[0:9].to_html(index=False)
-    response = make_response(render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path, last_detect_path=last_detect_path))
-    response.headers['Refresh'] = '10'
-    return response
+    return render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path, last_detect_path=last_detect_path)
+
+# Define the route to display audio recordings
+@app.route("/audio")
+def audio():
+    # set directory path
+    audio_dir = os.path.join(app.static_folder, 'audio')
+
+    # get a list of audio files in the directory
+    audio_files = [f for f in os.listdir(audio_dir) if os.path.isfile(os.path.join(audio_dir, f)) and f.endswith('.wav')]
+
+    # create a list of audio file URLs
+    audio_urls = [url_for('static', filename=f'audio/{f}') for f in audio_files]
+
+    # render the audio.html template with the audio file URLs
+    return render_template('audio.html', audio_urls=audio_urls)
 
 # Run the app
 if __name__ == "__main__":
