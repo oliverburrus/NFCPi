@@ -7,7 +7,7 @@
   <body>
     <h1>Audio List</h1>
     <ul>
-      {% for file in audio_files %}
+      {% for file in audio %}
         <li>
           <a href="{{ url_for('static', filename='audio/' + file) }}">{{ file }}</a>
           <audio controls>
