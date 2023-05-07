@@ -31,8 +31,9 @@ def plot():
         df1 = pd.DataFrame({"Species": new_data})
     prediction = Path('prediction.txt').read_text()
     spectrogram_path = "static/images/spectrogram.png"
+    last_detect_path = "static/images/last_detect.png"
     table_html = df1[0:9].to_html(index=False)
-    response = make_response(render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path))
+    response = make_response(render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path, last_detect_path=last_detect_path))
     response.headers['Refresh'] = '10'
     return response
 
