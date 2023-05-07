@@ -115,8 +115,6 @@ while x == 0:
                     df = analyze(filename.path)
                     generate_spectrogram(filename)
                     print("1\n")
-                    os.remove(filename.path)
-                    print("2\n")
                     if df.Prediction[0] > .7:
                         prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
                         new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
@@ -147,11 +145,16 @@ while x == 0:
                         df['timestamp'] = datetime.now()
                         generate_spectrogram(filename)
                         print("1\n")
-                        os.remove(filename.path)
                         if bn_list:
                             # specify the source and destination file paths
                             src_file = '/home/pi/NFCPi/flask_app/static/images/spectrogram.png'
                             dst_file = "/home/pi/NFCPi/flask_app/static/images/last_detect.png"
+
+                            # copy the file from source to destination
+                            shutil.copy(src_file, dst_file)
+                            # specify the source and destination file paths
+                            src_file = filename.path
+                            dst_file = "/home/pi/NFCPi/flask_app/static/audio/"+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+".png"
 
                             # copy the file from source to destination
                             shutil.copy(src_file, dst_file)
@@ -168,12 +171,13 @@ while x == 0:
                             prediction = "Not confident in my prediction"
                         text_file = open("flask_app/prediction.txt", "w") 
                         print("4\n")
-
+                        
                         # Writing the file 
                         text_file.write(prediction) 
                         text_file.close()
                     except:
                         print("error processing file")
+                os.remove(filename.path)
             else:
                 print(f"Ignoring file {filename}, not a .wav file")
                 continue
