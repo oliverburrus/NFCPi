@@ -30,10 +30,10 @@ def audio():
     audio_files = [f for f in os.listdir(audio_dir) if os.path.isfile(os.path.join(audio_dir, f)) and f.endswith('.wav')]
 
     # create a list of audio file URLs
-    audio_urls = [url_for('static', filename=f'audio/{f}') for f in audio_files]
+    audio = [url_for('static', filename=f'audio/{f}') for f in audio_files]
 
     # render the audio.html template with the audio file URLs
-    return render_template('audio_list.html', audio_urls=audio_urls)
+    return render_template('audio_list.html', audio=audio)
 
 # Run the app
 if __name__ == "__main__":
