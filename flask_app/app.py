@@ -33,7 +33,7 @@ def audio():
     audio_urls = [url_for('static', filename=f'audio/{f}') for f in audio_files]
 
     # render the audio.html template with the audio file URLs
-    return render_template('audio.html', audio_urls=audio_urls)
+    return render_template('audio_list.html', audio_urls=audio_urls)
 
 # Run the app
 if __name__ == "__main__":
