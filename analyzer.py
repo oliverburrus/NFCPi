@@ -96,6 +96,8 @@ print("before loop")
 if not os.path.exists("audio"):
     os.mkdir("audio")
 while x == 0:
+    print('Starting recording...')
+    os.system('arecord --format=S16_LE --duration=10 --rate=22050 audio/'+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+'.wav')
     print("before for loop")
     for filename in os.scandir(aud_dir):
         print("before if 1")
