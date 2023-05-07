@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NFCPi - Audio List</title>
+  </head>
+  <body>
+    <h1>Audio List</h1>
+    <ul>
+      {% for file in audio_files %}
+        <li><a href="{{ url_for('static', filename='audio/' + file) }}">{{ file }}</a></li>
+      {% endfor %}
+    </ul>
+    <a href="{{ url_for('plot') }}">Go back to plot</a>
+  </body>
+</html>
