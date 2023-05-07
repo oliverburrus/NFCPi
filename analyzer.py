@@ -97,8 +97,6 @@ print("before loop")
 if not os.path.exists("audio"):
     os.mkdir("audio")
 while x == 0:
-    print('Starting recording...')
-    os.system('arecord --format=S16_LE --duration=10 --rate=22050 audio/'+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+'.wav')
     print("before for loop")
     for filename in os.scandir(aud_dir):
         print("before if 1")
@@ -140,6 +138,8 @@ while x == 0:
                     text_file.write(prediction) 
                     text_file.close()
                 elif net == "day":
+                    print('Starting recording...')
+                    os.system('arecord --format=S16_LE --duration=10 --rate=22050 audio/'+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+'.wav')
                     try:
                         df1 = pd.DataFrame()
                         bn_list = analyze_birdnet(filename.path, 43.9, -90.0)
