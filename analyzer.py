@@ -149,6 +149,12 @@ while x == 0:
                         print("1\n")
                         os.remove(filename.path)
                         if bn_list:
+                            # specify the source and destination file paths
+                            src_file = '/home/pi/NFCPi/flask_app/static/images/spectrogram.png'
+                            dst_file = "/home/pi/NFCPi/flask_app/static/images/last_detect.png"
+
+                            # copy the file from source to destination
+                            shutil.copy(src_file, dst_file)
                             prediction = "Found a match!"
                             if os.path.exists("flask_app/bn_detections.csv"):
                                 df1 = pd.read_csv("flask_app/bn_detections.csv")
