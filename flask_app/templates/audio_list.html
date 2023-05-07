@@ -10,11 +10,11 @@
       {% for file in audio %}
         <li>
           <a href="{{ url_for('static', filename='audio/' + file) }}">{{ file }}</a>
-          <audio controls>
-            <source src="{{ url_for('static', filename='audio/' + file) }}" type="audio/wav">
-            Your browser does not support the audio element.
-          </audio>
         </li>
+        <audio controls>
+          <source src="{{ url_for('static', filename='audio/' + file) }}" type="audio/wav">
+          Your browser does not support the audio element.
+        </audio>
       {% endfor %}
     </ul>
     <a href="{{ url_for('plot') }}">Go back to plot</a>
