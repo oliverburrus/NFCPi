@@ -140,33 +140,33 @@ while x == 0:
                     text_file.write(prediction) 
                     text_file.close()
                 elif net == "day":
-                    #try:
-                    df1 = pd.DataFrame()
-                    bn_list = analyze_birdnet(filename.path, 43.9, -90.0)
-                    df = pd.DataFrame(bn_list)
-                    generate_spectrogram(filename)
-                    print("1\n")
-                    os.remove(filename.path)
-                    if bn_list:
-                        prediction = "Found a match!"
-                        if os.path.exists("flask_app/bn_detections.csv"):
-                            df1 = pd.read_csv("flask_app/bn_detections.csv")
-                            df1 = pd.concat([df1, df], ignore_index=True)
+                    try:
+                        df1 = pd.DataFrame()
+                        bn_list = analyze_birdnet(filename.path, 43.9, -90.0)
+                        df = pd.DataFrame(bn_list)
+                        generate_spectrogram(filename)
+                        print("1\n")
+                        os.remove(filename.path)
+                        if bn_list:
+                            prediction = "Found a match!"
+                            if os.path.exists("flask_app/bn_detections.csv"):
+                                df1 = pd.read_csv("flask_app/bn_detections.csv")
+                                df1 = pd.concat([df1, df], ignore_index=True)
+                            else:
+                                df1 = pd.DataFrame(columns=['common_name', 'confidence', 'end_time', 'scientific_name', 'start_time'])
+                                df1 = pd.concat([df1, df], ignore_index=True)
+                            df1.to_csv("flask_app/bn_detections.csv", index=False)
                         else:
-                            df1 = pd.DataFrame(columns=['common_name', 'confidence', 'end_time', 'scientific_name', 'start_time'])
-                            df1 = pd.concat([df1, df], ignore_index=True)
-                        df1.to_csv("flask_app/bn_detections.csv", index=False)
-                    else:
-                        print("3\n")
-                        prediction = "Not confident in my prediction"
-                    text_file = open("flask_app/prediction.txt", "w") 
-                    print("4\n")
+                            print("3\n")
+                            prediction = "Not confident in my prediction"
+                        text_file = open("flask_app/prediction.txt", "w") 
+                        print("4\n")
 
-                    # Writing the file 
-                    text_file.write(prediction) 
-                    text_file.close()
-                    #except:
-                     #   print("error processing file")
+                        # Writing the file 
+                        text_file.write(prediction) 
+                        text_file.close()
+                    except:
+                        print("error processing file")
             else:
                 print(f"Ignoring file {filename}, not a .wav file")
                 continue
