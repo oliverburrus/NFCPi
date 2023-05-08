@@ -25,7 +25,7 @@
             <td>{{ file }}</td>
             <td>
               <audio controls>
-                <source src="{{ url_for('static', filename=os.path.abspath('audio/' + file)) }}" type="audio/wav">
+                <source src="{{file}}" type="audio/wav">
                 Your browser does not support the audio element.
               </audio>
             </td>
