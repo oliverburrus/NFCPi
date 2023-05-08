@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NFCPi - Stats</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <h1>Stats</h1>
+    <h2>Number of Detections: {{ num_detections }}</h2>
+    <h2>Number of Species: {{ num_species }}</h2>
+    <div class="plot">
+      <h2>Top 10 Common Names</h2>
+      <img src="{{ common_names_path }}" alt="bar plot of top 10 common names">
+    </div>
+    <div class="plot">
+      <h2>Confidence Histogram</h2>
+      <img src="{{ confidence_path }}" alt="histogram of confidence values">
+    </div>
+    <div class="plot">
+      <h2>Start Time vs. Confidence</h2>
+      <img src="{{ start_time_path }}" alt="scatter plot of start time vs. confidence">
+    </div>
+    <a href="{{ url_for('plot') }}">Go back to plot</a>
+  </body>
+</html>
