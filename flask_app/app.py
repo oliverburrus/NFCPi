@@ -34,6 +34,47 @@ def audio():
 
     # render the audio.html template with the audio file URLs
     return render_template('audio_list.html', audio=audio)
+    
+@app.route("/stats")
+def stats():
+    if os.path.exists("bn_detections.csv"):
+        df = pd.read_csv("bn_detections.csv")
+    else:
+        new_data = {"common_name": ["No detections"], "confidence": [0], "end_time": [0], "scientific_name": ["None"], "start_time": [0], "timestamp": ["None"]}
+        df = pd.DataFrame(new_data)
+
+    # Create a bar plot of the top 10 common names
+    top_common_names = df['common_name'].value_counts().head(10)
+    plt.bar(top_common_names.index, top_common_names.values)
+    plt.xticks(rotation=45, ha='right')
+    plt.xlabel('Common Name')
+    plt.ylabel('Number of Detections')
+    plt.tight_layout()
+    common_names_path = "static/images/common_names.png"
+    plt.savefig(common_names_path)
+    plt.clf()
+
+    # Create a histogram of the confidence values
+    plt.hist(df['confidence'], bins=20)
+    plt.xlabel('Confidence')
+    plt.ylabel('Frequency')
+    plt.tight_layout()
+    confidence_path = "static/images/confidence.png"
+    plt.savefig(confidence_path)
+    plt.clf()
+
+    # Create a scatter plot of start time vs. confidence
+    plt.scatter(df['start_time'], df['confidence'])
+    plt.xlabel('Start Time')
+    plt.ylabel('Confidence')
+    plt.tight_layout()
+    start_time_path = "static/images/start_time.png"
+    plt.savefig(start_time_path)
+    plt.clf()
+
+    # Pass the paths to the generated images and summary stats to the stats.html template
+    return render_template('stats.html', common_names_path=common_names_path, confidence_path=confidence_path, start_time_path=start_time_path, num_detections=len(df), num_species=len(df['scientific_name'].unique()))
+
 
 # Run the app
 if __name__ == "__main__":
