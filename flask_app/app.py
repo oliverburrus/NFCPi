@@ -36,13 +36,6 @@ def audio():
     # render the audio.html template with the audio file URLs
     return render_template('audio_list.html', audio=audio)
     
-import matplotlib.pyplot as plt
-import os
-import pandas as pd
-from flask import Flask, render_template
-
-app = Flask(__name__)
-
 @app.route("/stats")
 def stats():
     if os.path.exists("bn_detections.csv"):
