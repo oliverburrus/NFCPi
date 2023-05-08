@@ -14,13 +14,14 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
+  background-color: #2d3142;
   color: white;
   padding: 10px 20px;
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1;
 }
 
 nav a {
@@ -28,10 +29,53 @@ nav a {
   text-decoration: none;
   font-weight: bold;
   margin-right: 20px;
+  transition: all 0.2s ease-in-out;
 }
 
 nav a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  color: #f2f2f2;
+}
+
+nav .logo {
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+nav .menu-icon {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+nav .menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+nav .menu li {
+  list-style: none;
+}
+
+nav .menu li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  margin-right: 20px;
+  transition: all 0.2s ease-in-out;
+}
+
+nav .menu li a:hover {
+  text-decoration: none;
+  color: #f2f2f2;
+}
+
+nav .menu .active a {
+  color: #f2f2f2;
 }
 
 main {
