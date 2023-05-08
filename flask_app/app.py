@@ -36,6 +36,13 @@ def audio():
     # render the audio.html template with the audio file URLs
     return render_template('audio_list.html', audio=audio)
     
+import matplotlib.pyplot as plt
+import os
+import pandas as pd
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
 @app.route("/stats")
 def stats():
     if os.path.exists("bn_detections.csv"):
@@ -46,28 +53,28 @@ def stats():
 
     # Create a bar plot of the top 10 common names
     top_common_names = df['common_name'].value_counts().head(10)
-    plt.bar(top_common_names.index, top_common_names.values)
+    plt.bar(top_common_names.index, top_common_names.values, color='#003f5c')
     plt.xticks(rotation=45, ha='right')
-    plt.xlabel('Common Name')
-    plt.ylabel('Number of Detections')
+    plt.xlabel('Common Name', fontsize=14)
+    plt.ylabel('Number of Detections', fontsize=14)
     plt.tight_layout()
     common_names_path = "static/images/common_names.png"
     plt.savefig(common_names_path)
     plt.clf()
 
     # Create a histogram of the confidence values
-    plt.hist(df['confidence'], bins=20)
-    plt.xlabel('Confidence')
-    plt.ylabel('Frequency')
+    plt.hist(df['confidence'], bins=20, color='#58508d')
+    plt.xlabel('Confidence', fontsize=14)
+    plt.ylabel('Frequency', fontsize=14)
     plt.tight_layout()
     confidence_path = "static/images/confidence.png"
     plt.savefig(confidence_path)
     plt.clf()
 
     # Create a scatter plot of start time vs. confidence
-    plt.scatter(df['start_time'], df['confidence'])
-    plt.xlabel('Start Time')
-    plt.ylabel('Confidence')
+    plt.scatter(df['start_time'], df['confidence'], color='#bc5090')
+    plt.xlabel('Start Time', fontsize=14)
+    plt.ylabel('Confidence', fontsize=14)
     plt.tight_layout()
     start_time_path = "static/images/start_time.png"
     plt.savefig(start_time_path)
