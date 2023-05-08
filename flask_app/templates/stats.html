@@ -3,6 +3,11 @@
   <head>
     <title>NFCPi - Stats</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <nav>
+      <a href="{{ url_for('plot') }}">Home</a>
+      <a href="{{ url_for('audio') }}">Audio Recordings</a>
+      <a href="{{ url_for('stats') }}">Stats</a>
+    </nav>
   </head>
   <body>
     <h1>Stats</h1>
@@ -20,6 +25,5 @@
       <h2>Start Time vs. Confidence</h2>
       <img src="{{ start_time_path }}" alt="scatter plot of start time vs. confidence">
     </div>
-    <a href="{{ url_for('plot') }}">Go back to plot</a>
   </body>
 </html>
