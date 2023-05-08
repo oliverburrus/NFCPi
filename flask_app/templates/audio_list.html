@@ -5,18 +5,33 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   </head>
   <body>
-    <h1>Audio List</h1>
-    <ul>
-      {% for file in audio %}
-        <li>
-          <a href="{{ url_for('static', filename='audio/' + file) }}">{{ file }}</a>
-        </li>
-        <audio controls>
-          <source src="{{ url_for('static', filename='audio/' + file) }}" type="audio/wav">
-          Your browser does not support the audio element.
-        </audio>
-      {% endfor %}
-    </ul>
-    <a href="{{ url_for('plot') }}">Go back to plot</a>
+    <nav>
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('plot') }}">Plot</a>
+    </nav>
+    <main>
+      <h1>Audio List</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>File Name</th>
+            <th>Play Audio</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for file in audio %}
+          <tr>
+            <td>{{ file }}</td>
+            <td>
+              <audio controls>
+                <source src="{{ url_for('static', filename='audio/' + file) }}" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </main>
   </body>
 </html>
