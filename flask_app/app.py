@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for
 import os
 import pandas as pd
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 # Create the Flask app
 app = Flask(__name__)
