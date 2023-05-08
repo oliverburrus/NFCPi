@@ -34,7 +34,7 @@ def audio():
     audio = [url_for('static', filename=f'audio/{f}') for f in audio_files]
 
     # render the audio.html template with the audio file URLs
-    return render_template('audio_list.html', audio=audio)
+    return render_template('audio_list.html', audio=audio, os=os)
     
 @app.route("/stats")
 def stats():
