@@ -18,7 +18,7 @@ def plot():
     prediction = Path('prediction.txt').read_text()
     spectrogram_path = "static/images/spectrogram.png"
     last_detect_path = "static/images/last_detect.png"
-    table_html = df1[0:9].to_html(index=False)
+    table_html = df1.to_html(index=False)
     return render_template('plot.html', table_html=table_html, prediction=prediction, spectrogram_path=spectrogram_path, last_detect_path=last_detect_path)
 
 # Define the route to display audio recordings
