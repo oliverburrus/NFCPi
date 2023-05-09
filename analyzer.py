@@ -181,8 +181,8 @@ while x == 0:
             text_file.close()
         except:
             print("error processing file")
-    print(filename.path)
-    os.remove(filename.path)
+    print(filename)
+    os.remove(filename)
     #else:
      #   print(f"Ignoring file {filename}, not a .wav file")
       #  continue
