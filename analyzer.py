@@ -86,6 +86,7 @@ def analyze_birdnet(file, lat, lon):
         lon=lon,
         date=date.today(), # use date or week_48
         min_conf=0.1,
+        sensitivity=1.5
     )
     recording.analyze()
     return recording.detections
