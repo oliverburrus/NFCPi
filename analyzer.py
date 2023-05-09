@@ -85,7 +85,7 @@ def analyze_birdnet(file, lat, lon):
         lat=lat,
         lon=lon,
         date=date.today(), # use date or week_48
-        min_conf=0.2,
+        min_conf=0.1,
     )
     recording.analyze()
     return recording.detections
@@ -99,7 +99,7 @@ if not os.path.exists("audio"):
 while x == 0:
     print("before for loop")
     print('Starting recording...')
-    os.system('arecord --format=S16_LE --duration=10 --rate=22050 audio/'+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+'.wav')
+    os.system('arecord --format=S16_LE --duration=9 --rate=22050 audio/'+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+'.wav')
     for filename in os.scandir(aud_dir):
         print("before if 1")
         if filename.is_file():
