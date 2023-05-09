@@ -86,7 +86,8 @@ def analyze_birdnet(file, lat, lon):
         lon=lon,
         date=date.today(), # use date or week_48
         min_conf=0.1,
-        sensitivity=1.5
+        sensitivity=1.5,
+        extracted_audio_paths = {"/home/pi/NFCPi/flask_app/static/audio/"}
     )
     recording.analyze()
     return recording.detections
@@ -154,11 +155,11 @@ while x == 0:
                             # copy the file from source to destination
                             shutil.copy(src_file, dst_file)
                             # specify the source and destination file paths
-                            src_file = filename.path
-                            dst_file = "/home/pi/NFCPi/flask_app/static/audio/"+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+".wav"
+                            #src_file = filename.path
+                            #dst_file = "/home/pi/NFCPi/flask_app/static/audio/"+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+".wav"
 
                             # copy the file from source to destination
-                            shutil.copy(src_file, dst_file)
+                            #shutil.copy(src_file, dst_file)
                             prediction = "Found a match!"
                             if os.path.exists("flask_app/bn_detections.csv"):
                                 df1 = pd.read_csv("flask_app/bn_detections.csv")
