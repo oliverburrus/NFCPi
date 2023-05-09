@@ -109,6 +109,7 @@ while x == 0:
             if ext == ".wav":
                 # specify the source and destination file paths
                 src_file = filename.path
+                print(filename.path)
                 dst_file = "/home/pi/NFCPi/flask_app/static/audio/sample.wav"
 
                 # copy the file from source to destination
@@ -186,6 +187,7 @@ while x == 0:
                         text_file.close()
                     except:
                         print("error processing file")
+                print(filename.path)
                 os.remove(filename.path)
             else:
                 print(f"Ignoring file {filename}, not a .wav file")
