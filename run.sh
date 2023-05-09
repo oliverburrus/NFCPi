@@ -1,4 +1,4 @@
 #!/bin/bash
-python recorder.py &
-python analyzer.py &
-python flask_app/app.py
+nohup python analyzer.py &
+cd flask_app
+nohup python app.py &
