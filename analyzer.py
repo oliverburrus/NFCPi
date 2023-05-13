@@ -25,7 +25,7 @@ def get_wav_info(wav_file):
 def analyze(file, confidence):
     for i in range(0, 21):
         # Load the audio file
-        audio_file = AudioSegment.from_file("path/to/audio_file.wav")
+        audio_file = AudioSegment.from_file(file)
 
         # Set the start and end time for the segment in milliseconds
         start_time = i*500
