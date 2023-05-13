@@ -22,35 +22,71 @@ def get_wav_info(wav_file):
     frame_rate = wav.getframerate()
     wav.close()
     return sound_info, frame_rate
-def analyze(file):
-    sound_info, frame_rate = get_wav_info(file)
-    print("Sample rate - Analyze:" + str(frame_rate))
-    print("Audio length - Analyze:" + str(len(sound_info)))
-    pylab.specgram(sound_info, Fs=frame_rate)
-    pylab.savefig('sample.png')
-    image = tf.keras.preprocessing.image.load_img('sample.png', target_size=(256, 256))
-    image = tf.keras.preprocessing.image.img_to_array(image)
-    image /= 255.0
-    image = np.expand_dims(image, axis=0)
-    if not(os.path.exists('my_model.h5')):
-        model_url = 'https://drive.google.com/uc?export=download&id=1cFwNVpCaMacM9fDv_2qIEOB70XkwKfKs'
-        model_path = 'flask_app/my_model.h5'
-        # Download model file
-        urllib.request.urlretrieve(model_url, model_path)
-    else:
-        model_path = 'flask_app/my_model.h5'
-    # Load model from file
-    loaded_model = tf.keras.models.load_model(model_path)
-    predictions = loaded_model.predict(image)
-    df = pd.read_csv("https://raw.githubusercontent.com/oliverburrus/NFCPi/main/models/class_names.csv")
-    # Create dataframe with class names and predictions
-    df['Prediction'] = predictions[0]
-    df['percentage'] = df['Prediction'].apply(lambda x: f"{x:.2%}")
-    # Sort dataframe by prediction in descending order
-    df = df.sort_values(by='Prediction', ascending=False)
-    # Reset index
-    df = df.reset_index(drop=True)
-    return df
+def analyze(file, confidence):
+    for i in range(0, 21):
+        # Load the audio file
+        audio_file = AudioSegment.from_file("path/to/audio_file.wav")
+
+        # Set the start and end time for the segment in milliseconds
+        start_time = i*500
+        end_time = (i+2)*500    # 5 seconds
+
+        # Extract the segment between start_time and end_time
+        file = audio_file[start_time:end_time]
+
+        sound_info, frame_rate = get_wav_info(file)
+        print("Sample rate - Analyze:" + str(frame_rate))
+        print("Audio length - Analyze:" + str(len(sound_info)))
+        pylab.specgram(sound_info, Fs=frame_rate)
+        pylab.savefig('sample.png')
+        image = tf.keras.preprocessing.image.load_img('sample.png', target_size=(256, 256))
+        image = tf.keras.preprocessing.image.img_to_array(image)
+        image /= 255.0
+        image = np.expand_dims(image, axis=0)
+        if not(os.path.exists('my_model.h5')):
+            model_url = 'https://drive.google.com/uc?export=download&id=1cFwNVpCaMacM9fDv_2qIEOB70XkwKfKs'
+            model_path = 'flask_app/my_model.h5'
+            # Download model file
+            urllib.request.urlretrieve(model_url, model_path)
+        else:
+            model_path = 'flask_app/my_model.h5'
+        # Load model from file
+        loaded_model = tf.keras.models.load_model(model_path)
+        predictions = loaded_model.predict(image)
+        df = pd.read_csv("https://raw.githubusercontent.com/oliverburrus/NFCPi/main/models/class_names.csv")
+        # Create dataframe with class names and predictions
+        df['Prediction'] = predictions[0]
+        df['percentage'] = df['Prediction'].apply(lambda x: f"{x:.2%}")
+        # Sort dataframe by prediction in descending order
+        df = df.sort_values(by='Prediction', ascending=False)
+        # Reset index
+        df = df.reset_index(drop=True)
+        if df.Prediction[0] > .7:
+            # specify the source and destination file paths
+            src_file = 'sample.png'
+            dst_file = "/home/pi/NFCPi/flask_app/static/images/last_detect.png"
+            # copy the file from source to destination
+            shutil.copy(src_file, dst_file)
+            file.export("/home/pi/NFCPi/flask_app/static/audio/"+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+".wav", format="wav")
+            prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
+            new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
+            if os.path.exists("flask_app/detections.csv"):
+                df1 = pd.read_csv("flask_app/detections.csv")
+                df1 = pd.concat([df1, new_data], ignore_index=True)
+            else:
+                df2 = pd.DataFrame(columns=['Species', 'Probability', 'DT'])
+                df1 = pd.concat([df2, new_data], ignore_index=True)
+            df1.to_csv("flask_app/detections.csv", index=False)
+        else:
+            print("3\n")
+            prediction = "Not confident in my prediction"
+        print("1\n")
+        text_file = open("flask_app/prediction.txt", "w") 
+        print("4\n")
+        # Writing the file 
+        text_file.write(prediction) 
+        text_file.close()
+    
 def generate_spectrogram(filename):
     # Load audio file
     y, sr = librosa.load(filename)
@@ -65,6 +101,7 @@ def generate_spectrogram(filename):
     fig.savefig('flask_app/static/images/spectrogram.png')
     # Return the path to the spectrogram image
     #return 'static/images/spectrogram.png'
+    
 def analyze_birdnet(file, lat, lon):
     # Load and initialize the BirdNET-Analyzer models.
     analyzer = Analyzer()
@@ -80,7 +117,7 @@ def analyze_birdnet(file, lat, lon):
     recording.analyze()
     return recording.detections
 x = 0
-net = "day"
+net = "NFC"
 aud_dir = "audio"
 print("before loop")
 if not os.path.exists("audio"):
@@ -88,7 +125,7 @@ if not os.path.exists("audio"):
 while x == 0:
     print("before for loop")
     print('Starting recording...')
-    os.system('arecord --format=S16_LE --duration=9 --rate=22050 audio/'+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+'.wav')
+    os.system('arecord --format=S16_LE --duration=20 --rate=22050 audio/'+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+'.wav')
     for filename in os.scandir(aud_dir):
         print("before if 1")
         if filename.is_file():
@@ -102,27 +139,8 @@ while x == 0:
                 shutil.copy(src_file, dst_file)
                 if net == "NFC":
                     df1 = pd.DataFrame()
-                    df = analyze(filename.path)
+                    analyze(filename.path)
                     generate_spectrogram(filename)
-                    print("1\n")
-                    if df.Prediction[0] > .7:
-                        prediction = "This audio is likely of a(n) " + str(df.Species[0]) + " with a probability of " + str(df.percentage[0])
-                        new_data = pd.DataFrame({'Species': [df.Species[0]], "Probability": [df.percentage[0]], "DT": [datetime.now()]})
-                        if os.path.exists("flask_app/detections.csv"):
-                            df1 = pd.read_csv("flask_app/detections.csv")
-                            df1 = pd.concat([df1, new_data], ignore_index=True)
-                        else:
-                            df2 = pd.DataFrame(columns=['Species', 'Probability', 'DT'])
-                            df1 = pd.concat([df2, new_data], ignore_index=True)
-                        df1.to_csv("flask_app/detections.csv", index=False)
-                    else:
-                        print("3\n")
-                        prediction = "Not confident in my prediction"
-                    text_file = open("flask_app/prediction.txt", "w") 
-                    print("4\n")
-                    # Writing the file 
-                    text_file.write(prediction) 
-                    text_file.close()
                 elif net == "day":
                     try:
                         df1 = pd.DataFrame()
