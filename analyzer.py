@@ -22,10 +22,10 @@ def get_wav_info(wav_file):
     frame_rate = wav.getframerate()
     wav.close()
     return sound_info, frame_rate
-def analyze(file, confidence):
+def analyze(filename, confidence):
     for i in range(0, 21):
         # Load the audio file
-        audio_file = AudioSegment.from_file(file)
+        audio_file = AudioSegment.from_file(filename)
 
         # Set the start and end time for the segment in milliseconds
         start_time = i*500
@@ -33,8 +33,9 @@ def analyze(file, confidence):
 
         # Extract the segment between start_time and end_time
         file = audio_file[start_time:end_time]
+        file.export("sample.wav", format="wav")
 
-        sound_info, frame_rate = get_wav_info(file)
+        sound_info, frame_rate = get_wav_info("sample.wav")
         print("Sample rate - Analyze:" + str(frame_rate))
         print("Audio length - Analyze:" + str(len(sound_info)))
         pylab.specgram(sound_info, Fs=frame_rate)
