@@ -10,8 +10,8 @@ app = Flask(__name__)
 # Define the route to display the plot
 @app.route("/")
 def plot():
-    if os.path.exists("bn_detections.csv"):
-        df1 = pd.read_csv("bn_detections.csv")
+    if os.path.exists("detections.csv"):
+        df1 = pd.read_csv("detections.csv")
     else:
         new_data = ["No detections"]
         df1 = pd.DataFrame({"Species": new_data})
@@ -38,11 +38,11 @@ def audio():
     
 @app.route("/stats")
 def stats():
-    if os.path.exists("bn_detections.csv"):
-        df = pd.read_csv("bn_detections.csv")
-    else:
-        new_data = {"common_name": ["No detections"], "confidence": [0], "end_time": [0], "scientific_name": ["None"], "start_time": [0], "timestamp": ["None"]}
-        df = pd.DataFrame(new_data)
+    if os.path.exists("detections.csv"):
+        df = pd.read_csv("detections.csv")
+    #else:
+        #new_data = {"common_name": ["No detections"], "confidence": [0], "end_time": [0], "scientific_name": ["None"], "start_time": [0], "timestamp": ["None"]}
+        #df = pd.DataFrame(new_data)
 
     # Create a bar plot of the top 10 common names
     top_common_names = df['common_name'].value_counts().head(10)
