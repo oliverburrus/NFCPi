@@ -139,7 +139,7 @@ while x == 0:
                 shutil.copy(src_file, dst_file)
                 if net == "NFC":
                     df1 = pd.DataFrame()
-                    analyze(filename.path)
+                    analyze(filename.path, 0.7)
                     generate_spectrogram(filename)
                 elif net == "day":
                     try:
