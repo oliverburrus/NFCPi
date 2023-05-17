@@ -76,7 +76,7 @@ def analyze(filename, confidence):
         image = np.expand_dims(image, axis=0)
 
         predictions = binary_model.predict(image)
-        
+        print(predictions[0][1])
         if predictions[0][1] > 0.7:
             sound_info, frame_rate = get_wav_info("sample.wav")
             print("Sample rate - Analyze:" + str(frame_rate))
