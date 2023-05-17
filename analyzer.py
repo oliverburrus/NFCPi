@@ -15,6 +15,8 @@ from birdnetlib import Recording
 from birdnetlib.analyzer import Analyzer
 from datetime import date
 import shutil
+from scipy import signal
+
 def get_wav_info(wav_file):
     wav = wave.open(wav_file, 'r')
     frames = wav.readframes(-1)
