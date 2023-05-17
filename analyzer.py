@@ -37,7 +37,7 @@ def analyze(filename, confidence):
         file.export("sample.wav", format="wav")
         
 
-        samples, sample_rate = get_wav_info('/kaggle/input/warbler-nfc/CLO-43SD-AUDIO/CLO-43SD-AUDIO/audio/AMRE2330543281301.wav')
+        samples, sample_rate = get_wav_info('sample.wav')
 
         frequencies, times, spectrogram = signal.spectrogram(audio_with_noise, sr, scaling='spectrum', mode='magnitude', nfft=2048, window=('tukey', 0.25))
 
