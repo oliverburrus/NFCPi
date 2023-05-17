@@ -26,31 +26,31 @@ def get_wav_info(wav_file):
     return sound_info, frame_rate
 
 def get_models():
-        if not(os.path.exists('flask_app/binary.h5')):
-            model_url = 'https://drive.google.com/uc?export=download&id=1EI4lg3duddm22Fj1uLDD_wv4JdpMv0z9'
-            model_path = 'flask_app/binary.h5'
-            # Download model file
-            urllib.request.urlretrieve(model_url, model_path)
-        else:
-            model_path = 'flask_app/binary.h5'
-        # Load model from file
-        binary_model = tf.keras.models.load_model(model_path)
-        
-        if not(os.path.exists('flask_app/warbler.h5')):
-            model_url = 'https://drive.google.com/uc?export=download&id=1cFwNVpCaMacM9fDv_2qIEOB70XkwKfKs'
-            model_path = 'flask_app/warbler.h5'
-            # Download model file
-            urllib.request.urlretrieve(model_url, model_path)
-        else:
-            model_path = 'flask_app/warbler.h5'
-        # Load model from file
-        warbler_model = tf.keras.models.load_model(model_path)
+    print("Getting models ready...")
+    if not(os.path.exists('flask_app/binary.h5')):
+        model_url = 'https://drive.google.com/uc?export=download&id=1EI4lg3duddm22Fj1uLDD_wv4JdpMv0z9'
+        model_path = 'flask_app/binary.h5'
+        # Download model file
+        urllib.request.urlretrieve(model_url, model_path)
+    else:
+        model_path = 'flask_app/binary.h5'
+    # Load model from file
+    binary_model = tf.keras.models.load_model(model_path)
+
+    if not(os.path.exists('flask_app/warbler.h5')):
+        model_url = 'https://drive.google.com/uc?export=download&id=1cFwNVpCaMacM9fDv_2qIEOB70XkwKfKs'
+        model_path = 'flask_app/warbler.h5'
+        # Download model file
+        urllib.request.urlretrieve(model_url, model_path)
+    else:
+        model_path = 'flask_app/warbler.h5'
+    # Load model from file
+    warbler_model = tf.keras.models.load_model(model_path)
 
 def analyze(filename, confidence):
+    # Load the audio file
+    audio_file = AudioSegment.from_file(filename)
     for i in range(0, 19):
-        # Load the audio file
-        audio_file = AudioSegment.from_file(filename)
-
         # Set the start and end time for the segment in milliseconds
         start_time = i*500
         end_time = (i+2)*500    # 5 seconds
