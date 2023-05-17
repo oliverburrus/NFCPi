@@ -45,7 +45,7 @@ def analyze(filename, confidence):
 
         # Plot spectrogram
         plt.figure(figsize=(6.4, 4.8))
-        plt.specgram(audio_with_noise, Fs=sr, cmap='gray_r', scale='dB', mode='magnitude')
+        plt.specgram(samples, Fs=sample_rate, cmap='gray_r', scale='dB', mode='magnitude')
         #plt.axis('off')
         plt.savefig(f'sample.png', bbox_inches='tight', pad_inches = 0)
         plt.close()
