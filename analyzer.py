@@ -61,7 +61,7 @@ def analyze(filename, confidence):
         else:
             model_path = 'flask_app/binary.h5'
         # Load model from file
-        loaded_model = tf.keras.models.load_model(model_path)
+        model = tf.keras.models.load_model(model_path)
         predictions = model.predict(image)
         
         if predictions[0][1] > 0.7:
