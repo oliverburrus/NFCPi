@@ -46,6 +46,7 @@ def get_models():
         model_path = 'flask_app/warbler.h5'
     # Load model from file
     warbler_model = tf.keras.models.load_model(model_path)
+    return binary_model, warbler_model
 
 def analyze(filename, confidence):
     # Load the audio file
@@ -159,7 +160,7 @@ def analyze_birdnet(file, lat, lon):
 x = 0
 net = "NFC"
 aud_dir = "audio"
-get_models()
+binary_model, warbler_model = get_models()
 
 if not os.path.exists("audio"):
     os.mkdir("audio")
