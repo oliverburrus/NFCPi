@@ -25,6 +25,27 @@ def get_wav_info(wav_file):
     wav.close()
     return sound_info, frame_rate
 
+def get_models():
+        if not(os.path.exists('flask_app/binary.h5')):
+            model_url = 'https://drive.google.com/uc?export=download&id=1EI4lg3duddm22Fj1uLDD_wv4JdpMv0z9'
+            model_path = 'flask_app/binary.h5'
+            # Download model file
+            urllib.request.urlretrieve(model_url, model_path)
+        else:
+            model_path = 'flask_app/binary.h5'
+        # Load model from file
+        binary_model = tf.keras.models.load_model(model_path)
+        
+        if not(os.path.exists('flask_app/warbler.h5')):
+            model_url = 'https://drive.google.com/uc?export=download&id=1cFwNVpCaMacM9fDv_2qIEOB70XkwKfKs'
+            model_path = 'flask_app/warbler.h5'
+            # Download model file
+            urllib.request.urlretrieve(model_url, model_path)
+        else:
+            model_path = 'flask_app/warbler.h5'
+        # Load model from file
+        warbler_model = tf.keras.models.load_model(model_path)
+
 def analyze(filename, confidence):
     for i in range(0, 19):
         # Load the audio file
@@ -53,16 +74,8 @@ def analyze(filename, confidence):
         image = tf.keras.preprocessing.image.img_to_array(image)
         image /= 255.0
         image = np.expand_dims(image, axis=0)
-        if not(os.path.exists('flask_app/binary.h5')):
-            model_url = 'https://drive.google.com/uc?export=download&id=1EI4lg3duddm22Fj1uLDD_wv4JdpMv0z9'
-            model_path = 'flask_app/binary.h5'
-            # Download model file
-            urllib.request.urlretrieve(model_url, model_path)
-        else:
-            model_path = 'flask_app/binary.h5'
-        # Load model from file
-        model = tf.keras.models.load_model(model_path)
-        predictions = model.predict(image)
+
+        predictions = binary_model.predict(image)
         
         if predictions[0][1] > 0.7:
             sound_info, frame_rate = get_wav_info("sample.wav")
@@ -74,16 +87,7 @@ def analyze(filename, confidence):
             image = tf.keras.preprocessing.image.img_to_array(image)
             image /= 255.0
             image = np.expand_dims(image, axis=0)
-            if not(os.path.exists('flask_app/my_model.h5')):
-                model_url = 'https://drive.google.com/uc?export=download&id=1cFwNVpCaMacM9fDv_2qIEOB70XkwKfKs'
-                model_path = 'flask_app/my_model.h5'
-                # Download model file
-                urllib.request.urlretrieve(model_url, model_path)
-            else:
-                model_path = 'flask_app/my_model.h5'
-            # Load model from file
-            loaded_model = tf.keras.models.load_model(model_path)
-            predictions = loaded_model.predict(image)
+            predictions = warbler_model.predict(image)
             df = pd.read_csv("https://raw.githubusercontent.com/oliverburrus/NFCPi/main/models/class_names.csv")
             # Create dataframe with class names and predictions
             df['Prediction'] = predictions[0]
@@ -150,21 +154,23 @@ def analyze_birdnet(file, lat, lon):
     )
     recording.analyze()
     return recording.detections
+
+#Setup stuff
 x = 0
 net = "NFC"
 aud_dir = "audio"
-print("before loop")
+get_models()
+
 if not os.path.exists("audio"):
     os.mkdir("audio")
+
 while x == 0:
-    print("before for loop")
     print('Starting recording...')
     os.system('arecord --format=S16_LE --duration=20 --rate=22050 audio/'+ str(datetime.now().strftime('%Y%m%d%H%M%S'))+'.wav')
     for filename in os.scandir(aud_dir):
-        print("before if 1")
+        print("Starting analyzer...")
         if filename.is_file():
             name, ext = os.path.splitext(filename)
-            print("before if 2")
             if ext == ".wav":
                 # specify the source and destination file paths
                 src_file = filename.path
@@ -203,10 +209,8 @@ while x == 0:
                                 df1 = pd.concat([df2, df], ignore_index=True)
                             df1.to_csv("flask_app/bn_detections.csv", index=False)
                         else:
-                            print("3\n")
                             prediction = "Not confident in my prediction"
                         text_file = open("flask_app/prediction.txt", "w") 
-                        print("4\n")
                         
                         # Writing the file 
                         text_file.write(prediction) 
