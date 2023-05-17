@@ -41,7 +41,7 @@ def analyze(filename, confidence):
 
         samples, sample_rate = get_wav_info('sample.wav')
 
-        frequencies, times, spectrogram = signal.spectrogram(audio_with_noise, sr, scaling='spectrum', mode='magnitude', nfft=2048, window=('tukey', 0.25))
+        frequencies, times, spectrogram = signal.spectrogram(samples, sample_rate, scaling='spectrum', mode='magnitude', nfft=2048, window=('tukey', 0.25))
 
         # Plot spectrogram
         plt.figure(figsize=(6.4, 4.8))
