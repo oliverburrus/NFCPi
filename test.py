@@ -9,8 +9,22 @@ sample_rate = 16000  # Sample rate in Hz
 duration = 0.5  # Duration of each audio frame in seconds
 n_fft = 2048  # Number of FFT points
 
+def get_models():
+    print("Getting models ready...")
+    if not(os.path.exists('flask_app/binary.h5')):
+        model_url = 'https://drive.google.com/uc?export=download&id=14igHOLLg74WiM-eTHPVA9sKs_hAmiuVr'
+        model_path = 'flask_app/binary.h5'
+        # Download model file
+        urllib.request.urlretrieve(model_url, model_path)
+    else:
+        model_path = 'flask_app/binary.h5'
+    # Load model from file
+    binary_model = tf.keras.models.load_model(model_path)
+
+    return binary_model
+
 # Load the trained CNN model
-model = tf.keras.models.load_model('binary.h5')
+model = get_models()
 
 def save_spectrogram(spectrogram):
     # Convert spectrogram to a plot
