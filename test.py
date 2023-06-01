@@ -3,6 +3,8 @@ import numpy as np
 import tensorflow as tf
 from scipy import signal
 import matplotlib.pyplot as plt
+import os
+import urllib
 
 # Set up audio parameters
 sample_rate = 16000  # Sample rate in Hz
