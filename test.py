@@ -14,7 +14,7 @@ n_fft = 2048  # Number of FFT points
 def get_models():
     print("Getting models ready...")
     if not(os.path.exists('flask_app/binary.h5')):
-        model_url = 'https://drive.google.com/uc?export=download&id=14igHOLLg74WiM-eTHPVA9sKs_hAmiuVr'
+        model_url = 'https://drive.google.com/uc?export=download&id=17tjkDn26kXP7qafERn2MjpPFmwNfZ8Kk'
         model_path = 'flask_app/binary.h5'
         # Download model file
         urllib.request.urlretrieve(model_url, model_path)
