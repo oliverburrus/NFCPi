@@ -83,9 +83,10 @@ def audio_callback(indata, frames, time, status):
         normalized_spectrogram = resized_spectrogram / 255.0  # Normalize the spectrogram
 
         predictions = model.predict(normalized_spectrogram)
+        print(predictions)
         # Process the predictions or perform further analysis based on your specific task
 
-        save_spectrogram(spectrogram_segment)  # Replace `save_spectrogram` with your desired saving function
+        #save_spectrogram(spectrogram_segment)  # Replace `save_spectrogram` with your desired saving function
 
 
 # Start the audio stream
